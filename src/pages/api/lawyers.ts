@@ -1,11 +1,24 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSupabaseAdmin } from '../../lib/supabase';
 import { withErrorHandler } from '../../middleware/error';
-import logger from '../../utils/logger';
+
+// Safe logger wrapper to prevent errors if logger fails to import
+const safeLog = (level: string, message: string, data?: any) => {
+  try {
+    const logger = require('../../utils/logger').default;
+    if (logger && typeof logger[level] === 'function') {
+      logger[level](message, data);
+    } else {
+      console[level === 'error' ? 'error' : level === 'warn' ? 'warn' : 'log'](`[${level}] ${message}`, data || '');
+    }
+  } catch (e) {
+    console.log(`[${level}] ${message}`, data || '');
+  }
+};
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
-    logger.warn('Invalid method for lawyers endpoint', { method: req.method });
+    safeLog('warn', 'Invalid method for lawyers endpoint', { method: req.method });
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
@@ -15,26 +28,42 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     
     if (!supabaseUrl || !supabaseAnonKey) {
-      logger.error('Supabase environment variables not configured', {
+      safeLog('error', 'Supabase environment variables not configured', {
         hasUrl: !!supabaseUrl,
         hasAnonKey: !!supabaseAnonKey,
       });
-      return res.status(500).json({
-        error: 'Configuration error',
-        message: 'Supabase environment variables are not set. Please configure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.',
-        details: 'Contact your administrator or check the deployment environment variables.',
+      // Return empty array instead of error - allows booking to proceed
+      return res.status(200).json({
+        success: true,
+        lawyers: [],
+        count: 0,
+        message: 'Supabase not configured. Lawyer selection is optional.',
       });
     }
 
     // Use admin client for server-side operations to bypass RLS
-    const supabaseAdmin = getSupabaseAdmin();
+    let supabaseAdmin;
+    try {
+      supabaseAdmin = getSupabaseAdmin();
+    } catch (clientError: any) {
+      safeLog('error', 'Failed to create Supabase admin client', { error: clientError.message });
+      // Return empty array instead of error - allows booking to proceed
+      return res.status(200).json({
+        success: true,
+        lawyers: [],
+        count: 0,
+        message: 'Database connection error. Lawyer selection is optional.',
+      });
+    }
     
     // Verify we have a valid client
     if (!supabaseAdmin) {
-      logger.error('Failed to create Supabase admin client');
-      return res.status(500).json({
-        error: 'Database configuration error',
-        message: 'Failed to initialize database connection. Please check your environment variables.',
+      safeLog('error', 'Supabase admin client is null');
+      return res.status(200).json({
+        success: true,
+        lawyers: [],
+        count: 0,
+        message: 'Database connection error. Lawyer selection is optional.',
       });
     }
     
@@ -46,7 +75,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       .order('name', { ascending: true });
 
     if (error) {
-      logger.error('Error fetching lawyers', { 
+      safeLog('error', 'Error fetching lawyers', { 
         error: error.message,
         code: error.code,
         details: error.details,
@@ -55,44 +84,48 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       
       // Provide helpful error message if table doesn't exist
       if (error.message?.includes('does not exist') || error.code === '42P01' || error.code === 'PGRST116') {
-        logger.warn('Lawyers table does not exist', { code: error.code });
+        safeLog('warn', 'Lawyers table does not exist', { code: error.code });
         // Return empty array instead of error - allows booking to proceed
         return res.status(200).json({
           success: true,
           lawyers: [],
           count: 0,
-          message: 'No lawyers table found. Please run the database setup script.',
+          message: 'No lawyers table found. Lawyer selection is optional.',
         });
       }
       
       // Check if it's a placeholder client error (connection to placeholder URL)
-      if (error.message?.includes('placeholder') || error.message?.includes('fetch failed')) {
-        logger.error('Placeholder client error or connection failure', { error: error.message });
-        return res.status(500).json({
-          error: 'Database connection error',
-          message: 'Unable to connect to the database. Please check your Supabase configuration.',
-          details: 'Verify that NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set correctly.',
+      if (error.message?.includes('placeholder') || error.message?.includes('fetch failed') || error.message?.includes('Failed to fetch')) {
+        safeLog('error', 'Placeholder client error or connection failure', { error: error.message });
+        // Return empty array instead of error - allows booking to proceed
+        return res.status(200).json({
+          success: true,
+          lawyers: [],
+          count: 0,
+          message: 'Database connection error. Lawyer selection is optional.',
         });
       }
       
-      logger.error('Database query error', { 
+      safeLog('error', 'Database query error', { 
         code: error.code,
         message: error.message,
       });
       
-      return res.status(500).json({
-        error: 'Failed to fetch lawyers',
-        message: error.message || 'Database query failed',
-        code: error.code,
+      // Return empty array for any other error - don't break the booking form
+      return res.status(200).json({
+        success: true,
+        lawyers: [],
+        count: 0,
+        message: 'Unable to load lawyers. Lawyer selection is optional.',
       });
     }
 
     const lawyerCount = lawyers?.length || 0;
-    logger.info('Lawyers fetched successfully', { count: lawyerCount });
+    safeLog('info', 'Lawyers fetched successfully', { count: lawyerCount });
 
     // Log warning if no lawyers found (helpful for debugging)
     if (lawyerCount === 0) {
-      logger.warn('No active lawyers found in database', {
+      safeLog('warn', 'No active lawyers found in database', {
         message: 'The lawyers table may be empty or all lawyers have inactive status',
         suggestion: 'Run the database setup script or insert-leadership-team.sql to populate lawyers',
       });
@@ -104,13 +137,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       count: lawyerCount,
     });
   } catch (error) {
-    logger.error('Error handling lawyers request', {
+    safeLog('error', 'Error handling lawyers request', {
       error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
     });
-    return res.status(500).json({
-      error: 'Internal server error',
-      message: error instanceof Error ? error.message : 'An unexpected error occurred',
+    // Return empty array instead of error - don't break the booking form
+    return res.status(200).json({
+      success: true,
+      lawyers: [],
+      count: 0,
+      message: 'An error occurred while loading lawyers. Lawyer selection is optional.',
     });
   }
 }
