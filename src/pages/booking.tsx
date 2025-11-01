@@ -94,7 +94,14 @@ const BookingPage: React.FC = () => {
             errorData = { error: `HTTP ${response.status}: ${response.statusText}` };
           }
           console.error('Error response:', errorData);
-          setErrorMessage(errorData.message || errorData.error || 'Failed to load lawyer list. Please refresh the page.');
+          
+          // For 500 errors, show user-friendly message
+          if (response.status === 500) {
+            const userMessage = errorData.message || errorData.error || 'Database configuration issue';
+            setErrorMessage(`${userMessage}. Lawyer selection is optional - you can still proceed with your booking.`);
+          } else {
+            setErrorMessage(errorData.message || errorData.error || 'Failed to load lawyer list. Lawyer selection is optional - you can still proceed with your booking.');
+          }
         } else {
           const data = await response.json();
           console.log('Lawyers data received:', data);

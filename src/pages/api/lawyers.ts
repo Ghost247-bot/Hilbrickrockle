@@ -10,8 +10,33 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
+    // Check if Supabase environment variables are set
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    
+    if (!supabaseUrl || !supabaseAnonKey) {
+      logger.error('Supabase environment variables not configured', {
+        hasUrl: !!supabaseUrl,
+        hasAnonKey: !!supabaseAnonKey,
+      });
+      return res.status(500).json({
+        error: 'Configuration error',
+        message: 'Supabase environment variables are not set. Please configure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.',
+        details: 'Contact your administrator or check the deployment environment variables.',
+      });
+    }
+
     // Use admin client for server-side operations to bypass RLS
     const supabaseAdmin = getSupabaseAdmin();
+    
+    // Verify we have a valid client
+    if (!supabaseAdmin) {
+      logger.error('Failed to create Supabase admin client');
+      return res.status(500).json({
+        error: 'Database configuration error',
+        message: 'Failed to initialize database connection. Please check your environment variables.',
+      });
+    }
     
     // Fetch active lawyers from Supabase with all fields
     const { data: lawyers, error } = await supabaseAdmin
@@ -29,17 +54,36 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       });
       
       // Provide helpful error message if table doesn't exist
-      if (error.message?.includes('does not exist') || error.code === '42P01') {
-        return res.status(500).json({
-          error: 'Database table not found',
-          message: 'The lawyers table does not exist in the database. Please run the database setup script in Supabase SQL Editor.',
-          details: 'See scripts/database-setup.sql for the table creation script.',
+      if (error.message?.includes('does not exist') || error.code === '42P01' || error.code === 'PGRST116') {
+        logger.warn('Lawyers table does not exist', { code: error.code });
+        // Return empty array instead of error - allows booking to proceed
+        return res.status(200).json({
+          success: true,
+          lawyers: [],
+          count: 0,
+          message: 'No lawyers table found. Please run the database setup script.',
         });
       }
       
+      // Check if it's a placeholder client error (connection to placeholder URL)
+      if (error.message?.includes('placeholder') || error.message?.includes('fetch failed')) {
+        logger.error('Placeholder client error or connection failure', { error: error.message });
+        return res.status(500).json({
+          error: 'Database connection error',
+          message: 'Unable to connect to the database. Please check your Supabase configuration.',
+          details: 'Verify that NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set correctly.',
+        });
+      }
+      
+      logger.error('Database query error', { 
+        code: error.code,
+        message: error.message,
+      });
+      
       return res.status(500).json({
         error: 'Failed to fetch lawyers',
-        message: error.message,
+        message: error.message || 'Database query failed',
+        code: error.code,
       });
     }
 
