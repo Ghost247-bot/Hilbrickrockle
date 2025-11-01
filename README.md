@@ -1,10 +1,10 @@
-# Hilbrick-Rockle LAW Website Clone
+# Hilbrick-Rockle LAW Website
 
-A professional legal firm website clone built with modern web technologies, focusing on user experience and accessibility.
+A professional legal firm website built with modern web technologies, focusing on user experience and accessibility.
 
 ## Project Overview
 
-This project aims to create a professional legal firm website clone that maintains the aesthetics of Hilbrick-Rockle LAW while incorporating unique branding elements. The website will be fully responsive, accessible, and optimized for search engines.
+This project is a professional legal firm website for Hilbrick-Rockle LAW. The website is fully responsive, accessible, and optimized for search engines.
 
 ## Key Features
 
@@ -42,11 +42,11 @@ This project aims to create a professional legal firm website clone that maintai
 - Event registration system
 
 ### 6. Careers
-- Job listings
+- Job listings with application forms
 - Culture and values
 - Professional development
 - Benefits and compensation
-- Application portal
+- Application portal with database integration
 
 ### 7. Client Resources
 - Document library
@@ -62,6 +62,13 @@ This project aims to create a professional legal firm website clone that maintai
 - Office directory
 - Social media links
 
+### 9. Admin Dashboard
+- Manage appointments
+- View contact messages
+- Manage job applications
+- Lawyer management
+- Document links management
+
 ## Technical Specifications
 
 ### Frontend
@@ -69,23 +76,23 @@ This project aims to create a professional legal firm website clone that maintai
 - Next.js for server-side rendering and routing
 - Tailwind CSS for styling
 - Framer Motion for animations
-- React Query for data fetching
 - TypeScript for type safety
 
 ### Backend
-- Node.js with Express
-- MongoDB for database
-- Redis for caching
-- AWS S3 for file storage
-- Elasticsearch for search functionality
+- Next.js API routes
+- Supabase for database (PostgreSQL)
+- MailerSend for email notifications
+- File upload handling
+
+### Database
+- Supabase (PostgreSQL)
+- Tables: appointments, contact_messages, lawyers, job_applications, document_links
 
 ### Performance & SEO
 - Server-side rendering
 - Image optimization
 - Lazy loading
 - Meta tags optimization
-- Sitemap generation
-- Robots.txt configuration
 
 ### Accessibility
 - WCAG 2.1 compliance
@@ -102,11 +109,10 @@ src/
 ├── pages/             # Next.js pages
 ├── styles/            # Global styles and Tailwind config
 ├── lib/               # Utility functions and helpers
-├── hooks/             # Custom React hooks
 ├── types/             # TypeScript type definitions
 ├── api/               # API routes and services
-├── assets/            # Images, fonts, and other static files
-└── config/            # Configuration files
+├── utils/             # Utility functions
+└── middleware/        # Middleware functions
 ```
 
 ## Getting Started
@@ -117,10 +123,19 @@ src/
    npm install
    ```
 3. Set up environment variables:
-   ```bash
-   cp .env.example .env.local
+   Create a `.env.local` file with:
    ```
-4. Run the development server:
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+   MAILERSEND_API_KEY=your_mailersend_key
+   MAILERSEND_FROM_EMAIL=noreply@yourdomain.com
+   MAILERSEND_FROM_NAME=Hilbrick&Rockle Legal
+   NOTIFICATION_EMAIL=admin@yourdomain.com
+   ```
+4. Set up the database:
+   - Run the SQL in `supabase.sql` in your Supabase SQL Editor
+5. Run the development server:
    ```bash
    npm run dev
    ```
@@ -128,18 +143,16 @@ src/
 ## Development Guidelines
 
 - Follow the established coding standards
-- Write unit tests for components
 - Ensure responsive design for all new features
 - Maintain accessibility standards
 - Document new features and components
 
 ## Deployment
 
-The application will be deployed using:
+The application can be deployed using:
 - Vercel for frontend hosting
-- AWS for backend services
-- CDN for static assets
-- CI/CD pipeline with GitHub Actions
+- Supabase for database
+- Environment variables for configuration
 
 ## Contributing
 
