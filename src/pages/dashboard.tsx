@@ -103,7 +103,14 @@ const Dashboard = () => {
         <div className="mb-6">
           <h3 className="text-lg font-semibold mb-2">Change Password</h3>
           <form onSubmit={handlePasswordChange} className="space-y-2">
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="New Password" className="w-full px-3 py-2 border rounded" />
+            <input 
+              type="password" 
+              value={password} 
+              onChange={e => setPassword(e.target.value)} 
+              placeholder="New Password" 
+              autoComplete="new-password"
+              className="w-full px-3 py-2 border rounded" 
+            />
             <button type="submit" className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Change Password</button>
             {passwordMsg && <div className="text-sm mt-1">{passwordMsg}</div>}
           </form>

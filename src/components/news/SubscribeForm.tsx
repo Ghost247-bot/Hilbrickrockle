@@ -99,6 +99,7 @@ const SubscribeForm: React.FC = () => {
             value={formData.email}
             onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
             placeholder="Your Email"
+            autoComplete="email"
             className="w-full px-4 py-2.5 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-white/50 text-white"
           />
         </div>

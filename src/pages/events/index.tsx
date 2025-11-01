@@ -48,7 +48,7 @@ const EventsPage: React.FC = () => {
     {
       title: 'Real Estate Investment Forum',
       date: 'February 15, 2024',
-      location: 'New York, NY',
+      location: 'Lincoln, Nebraska',
       description: 'Insights from leading experts on real estate investment trends.',
       image: '/images/events/real-estate-forum.jpg',
       category: 'Forum',
@@ -59,7 +59,7 @@ const EventsPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Events - Haryawn</title>
+        <title>Events - Hilbrick-Rockle LAW</title>
         <meta name="description" content="Join us for upcoming events, webinars, and conferences featuring our legal experts." />
       </Head>
 
@@ -105,7 +105,7 @@ const EventsPage: React.FC = () => {
                     src={event.image}
                     alt={event.title}
                     fill
-                    className="object-cover"
+                    style={{ objectFit: 'cover' }}
                   />
                   <div className="absolute top-4 right-4">
                     <span className="bg-primary-600 text-white px-3 py-1 rounded-full text-sm">
@@ -151,7 +151,7 @@ const EventsPage: React.FC = () => {
                     src={event.image}
                     alt={event.title}
                     fill
-                    className="object-cover"
+                    style={{ objectFit: 'cover' }}
                   />
                   <div className="absolute top-4 right-4">
                     <span className="bg-gray-600 text-white px-3 py-1 rounded-full text-sm">

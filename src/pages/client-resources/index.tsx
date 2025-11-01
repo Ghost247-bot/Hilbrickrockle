@@ -83,8 +83,8 @@ const ClientResourcesPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Client Resources - Haryawn</title>
-        <meta name="description" content="Access tools, publications, and resources for Haryawn clients." />
+        <title>Client Resources - Hilbrick-Rockle LAW</title>
+        <meta name="description" content="Access tools, publications, and resources for Hilbrick-Rockle LAW clients." />
       </Head>
 
       {/* Hero Section */}
@@ -162,12 +162,12 @@ const ClientResourcesPage: React.FC = () => {
                 className="bg-white rounded-lg shadow-md overflow-hidden"
               >
                 <div className="relative h-48">
-                  <Image
-                    src={pub.image}
-                    alt={pub.title}
-                    fill
-                    className="object-cover"
-                  />
+                <Image
+                  src={pub.image}
+                  alt={pub.title}
+                  fill
+                  style={{ objectFit: 'cover' }}
+                />
                 </div>
                 <div className="p-6">
                   <div className="flex items-center text-gray-600 mb-2">

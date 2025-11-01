@@ -112,8 +112,7 @@ const HeroSlideshow: React.FC = () => {
                 src={slides[currentSlide].image}
                 alt={slides[currentSlide].title}
                 fill
-                className="object-cover object-center"
-                priority
+                style={{ objectFit: 'cover', objectPosition: 'center' }}
                 quality={90}
                 sizes="100vw"
                 onError={() => setImageError(prev => ({ ...prev, [currentSlide]: true }))}

@@ -9,7 +9,7 @@ const AboutPage: React.FC = () => {
     {
       year: '1934',
       title: 'Firm Founded',
-      description: 'Haryawn was established in Los Angeles, California.',
+      description: 'Hilbrick-Rockle LAW was established in Los Angeles, California.',
     },
     {
       year: '1960',
@@ -54,8 +54,8 @@ const AboutPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>About Us - Haryawn</title>
-        <meta name="description" content="Learn about Haryawn's history, values, and leadership team." />
+        <title>About Us - Hilbrick-Rockle LAW</title>
+        <meta name="description" content="Learn about Hilbrick-Rockle LAW's history, values, and leadership team." />
       </Head>
 
       {/* Hero Section */}
@@ -64,7 +64,7 @@ const AboutPage: React.FC = () => {
           <img
             className="w-full h-full object-cover opacity-50"
             src="/images/about/hero.jpg"
-            alt="About Haryawn"
+            alt="About Hilbrick-Rockle LAW"
           />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">

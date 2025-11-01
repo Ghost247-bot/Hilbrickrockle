@@ -104,8 +104,8 @@ const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen">
       <Head>
-        <title>Haryawn - Global Law Firm</title>
-        <meta name="description" content="Haryawn is a global law firm providing comprehensive legal services across various practice areas." />
+        <title>Hilbrick-Rockle LAW - Global Law Firm</title>
+        <meta name="description" content="Hilbrick-Rockle LAW is a global law firm providing comprehensive legal services across various practice areas." />
       </Head>
 
       {/* Hero Slideshow */}
@@ -128,7 +128,8 @@ const HomePage: React.FC = () => {
                     src={item.image}
                     alt={item.title}
                     fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    style={{ objectFit: 'cover' }}
+                    className="transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
                 <div className="p-6">
@@ -173,7 +174,7 @@ const HomePage: React.FC = () => {
                     src={deal.image}
                     alt={deal.title}
                     fill
-                    className="object-cover"
+                    style={{ objectFit: 'cover' }}
                   />
                 </div>
                 <div className="p-6">

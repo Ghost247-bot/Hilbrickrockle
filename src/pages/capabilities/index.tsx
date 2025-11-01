@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NextPage } from 'next';
+import Link from 'next/link';
 
 const categories = [
   { id: 'all', name: 'All Capabilities' },
@@ -61,13 +62,13 @@ const CapabilitiesPage: NextPage = () => {
       {/* Category Filter */}
       <div className="border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8 py-4">
+          <div className="flex flex-wrap gap-2 sm:gap-4 py-4">
             {categories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
                 className={`
-                  px-3 py-2 text-sm font-medium rounded-md
+                  px-3 py-2 text-xs sm:text-sm font-medium rounded-md whitespace-nowrap
                   ${selectedCategory === category.id
                     ? 'bg-blue-600 text-white'
                     : 'text-gray-500 hover:text-gray-700'}
@@ -92,8 +93,8 @@ const CapabilitiesPage: NextPage = () => {
                 {capability.name}
               </h3>
               <div className="mt-2">
-                <a
-                  href={`/capabilities/${capability.name.toLowerCase().replace(/\s+/g, '-')}`}
+                <Link
+                  href={`/capabilities/${capability.name.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and').replace(/[^a-z0-9-]/g, '')}`}
                   className="text-blue-600 group-hover:text-blue-700 font-medium text-sm inline-flex items-center"
                 >
                   Learn more
@@ -111,7 +112,7 @@ const CapabilitiesPage: NextPage = () => {
                       d="M9 5l7 7-7 7"
                     />
                   </svg>
-                </a>
+                </Link>
               </div>
             </div>
           ))}

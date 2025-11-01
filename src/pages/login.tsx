@@ -15,17 +15,7 @@ const UserLogin = () => {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        // Check if user is admin
-        const { data: adminData } = await supabase
-          .from('admins')
-          .select('*')
-          .eq('user_id', session.user.id)
-          .single();
-        if (adminData) {
-          router.replace('/admin/dashboard');
-        } else {
-          router.replace('/dashboard');
-        }
+        router.replace('/dashboard');
       } else {
         setChecking(false);
       }
@@ -48,17 +38,7 @@ const UserLogin = () => {
         setIsLoading(false);
         return;
       }
-      // Check if user is admin
-      const { data: adminData } = await supabase
-        .from('admins')
-        .select('*')
-        .eq('user_id', data.user.id)
-        .single();
-      if (adminData) {
-        router.replace('/admin/dashboard');
-      } else {
-        router.replace('/dashboard');
-      }
+      router.replace('/dashboard');
     } catch (err) {
       setError('An error occurred. Please try again.');
     } finally {
@@ -83,6 +63,7 @@ const UserLogin = () => {
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
+              autoComplete="email"
               required
               className="mt-1 w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -94,6 +75,7 @@ const UserLogin = () => {
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
+              autoComplete="current-password"
               required
               className="mt-1 w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />

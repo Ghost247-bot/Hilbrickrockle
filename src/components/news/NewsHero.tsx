@@ -20,8 +20,8 @@ const NewsHero: React.FC = () => {
           src="/images/news/hero-bg.jpg"
           alt="Legal office building"
           fill
-          priority
-          className="object-cover transform scale-105 motion-safe:animate-subtle-zoom"
+          style={{ objectFit: 'cover' }}
+          className="transform scale-105 motion-safe:animate-subtle-zoom"
           sizes="100vw"
         />
         {/* Gradient Overlay */}

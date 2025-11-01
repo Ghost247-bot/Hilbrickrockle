@@ -200,6 +200,7 @@ export default function ContactForm() {
           placeholder="Your Email"
           value={formData.email}
           onChange={handleChange}
+          autoComplete="email"
           disabled={isSubmitting}
         />
         {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}

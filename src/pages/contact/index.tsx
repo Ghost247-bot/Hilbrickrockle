@@ -23,7 +23,6 @@ const ContactPage: React.FC = () => {
     setErrorMessage('');
 
     try {
-      console.log('Submitting form data:', formData);
       const response = await fetch('/api/contact/submit', {
         method: 'POST',
         headers: {
@@ -32,24 +31,54 @@ const ContactPage: React.FC = () => {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
-      console.log('Response from server:', data);
-
-      if (!response.ok) {
-        throw new Error(data.error || data.details || 'Failed to submit form');
+      // Check if response is ok before parsing
+      const contentType = response.headers.get('content-type');
+      let data;
+      
+      if (contentType && contentType.includes('application/json')) {
+        try {
+          data = await response.json();
+        } catch (jsonError) {
+          throw new Error('Invalid response from server');
+        }
+      } else {
+        // If not JSON, read as text
+        const text = await response.text();
+        throw new Error(text || 'Failed to submit form');
       }
 
-      setSubmitStatus('success');
-      // Clear form
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: '',
-      });
+      if (!response.ok) {
+        // Handle different error response formats
+        let errorMessage = 'Failed to submit form';
+        
+        if (data.errors && Array.isArray(data.errors)) {
+          errorMessage = data.errors.join(', ');
+        } else if (data.error) {
+          errorMessage = data.error;
+        } else if (data.message) {
+          errorMessage = data.message;
+        } else if (data.details) {
+          errorMessage = data.details;
+        }
+        
+        throw new Error(errorMessage);
+      }
+
+      // Success response
+      if (data.success) {
+        setSubmitStatus('success');
+        // Clear form
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: '',
+        });
+      } else {
+        throw new Error(data.message || 'Failed to submit form');
+      }
     } catch (error) {
-      console.error('Error submitting form:', error);
       setSubmitStatus('error');
       setErrorMessage(error instanceof Error ? error.message : 'Failed to submit form');
     } finally {
@@ -67,30 +96,30 @@ const ContactPage: React.FC = () => {
 
   const officeLocations = [
     {
-      city: 'New York',
-      address: '1271 Avenue of the Americas, New York, NY 10020',
-      phone: '+1 (212) 906-1200',
-      email: 'newyork@lw.com',
+      city: 'Lincoln',
+      address: 'South 13th Street, Lincoln, Nebraska 68508',
+      phone: '+1 (402) 906-1200',
+      email: 'newyork@hilbrickrockle.pro',
     },
     {
       city: 'London',
       address: '99 Bishopsgate, London EC2M 3XF, United Kingdom',
       phone: '+44 20 7710 1000',
-      email: 'london@lw.com',
+      email: 'london@hilbrickrockle.pro',
     },
     {
       city: 'Hong Kong',
       address: '29th Floor, One Taikoo Place, 979 King\'s Road, Hong Kong',
       phone: '+852 2522 7886',
-      email: 'hongkong@lw.com',
+      email: 'hongkong@hilbrickrockle.pro',
     },
   ];
 
   return (
     <>
       <Head>
-        <title>Contact Us - Haryawn</title>
-        <meta name="description" content="Get in touch with Haryawn. Find our office locations and contact information." />
+        <title>Contact Us - Hilbrick-Rockle LAW</title>
+        <meta name="description" content="Get in touch with Hilbrick-Rockle LAW. Find our office locations and contact information." />
       </Head>
 
       {/* Hero Section */}
@@ -129,8 +158,16 @@ const ContactPage: React.FC = () => {
               <h2 className="text-3xl font-bold mb-8">Send Us a Message</h2>
 
               {submitStatus === 'success' && (
-                <div className="mb-6 p-4 bg-green-50 text-green-700 rounded-md">
-                  Thank you for your message. We will get back to you soon.
+                <div className="mb-6 p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg">
+                  <div className="flex items-start gap-3">
+                    <svg className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                      <p className="font-semibold">Message Sent Successfully!</p>
+                      <p className="text-sm mt-1">Thank you for your message. We've received it and sent a confirmation email to your address. We will get back to you within 24-48 hours.</p>
+                    </div>
+                  </div>
                 </div>
               )}
 

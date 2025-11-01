@@ -28,14 +28,14 @@ const languages = ['All', 'English', 'Spanish', 'French', 'German'];
 const offices: Office[] = [
   {
     id: 'new-york',
-    city: 'New York',
+    city: 'Lincoln',
     country: 'United States',
     region: 'North America',
-    address: '885 Third Avenue, New York, NY 10022',
-    phone: '+1 (212) 906-1200',
-    email: 'newyork@haryawn.com',
-    coordinates: { lat: 40.7589, lng: -73.9851 },
-    timezone: 'EST',
+    address: 'South 13th Street, Lincoln, Nebraska 68508',
+    phone: '+1 (402) 906-1200',
+    email: 'newyork@hilbrickrockle.pro',
+    coordinates: { lat: 40.8136, lng: -96.7026 },
+    timezone: 'CST',
     languages: ['English', 'Spanish'],
     specialties: ['Corporate Law', 'M&A', 'Securities'],
     image: '/images/offices/new-york.jpg'
@@ -47,7 +47,7 @@ const offices: Office[] = [
     region: 'Europe',
     address: '99 Bishopsgate, London EC2M 3XF',
     phone: '+44 20 7710 1000',
-    email: 'london@haryawn.com',
+    email: 'london@hilbrickrockle.pro',
     coordinates: { lat: 51.5194, lng: -0.0807 },
     timezone: 'GMT',
     languages: ['English', 'French', 'German'],
@@ -61,7 +61,7 @@ const offices: Office[] = [
     region: 'Asia Pacific',
     address: 'Marunouchi Building, 2-4-1 Marunouchi, Chiyoda-ku, Tokyo 100-6325',
     phone: '+81 3 6212 3900',
-    email: 'tokyo@haryawn.com',
+    email: 'tokyo@hilbrickrockle.pro',
     coordinates: { lat: 35.6812, lng: 139.7671 },
     timezone: 'JST',
     languages: ['English'],
@@ -75,7 +75,7 @@ const offices: Office[] = [
     region: 'Asia Pacific',
     address: 'One Raffles Quay, North Tower, Level 25, Singapore 048583',
     phone: '+65 6535 6000',
-    email: 'singapore@haryawn.com',
+    email: 'singapore@hilbrickrockle.pro',
     coordinates: { lat: 1.2838, lng: 103.8515 },
     timezone: 'SGT',
     languages: ['English', 'French'],
@@ -89,7 +89,7 @@ const offices: Office[] = [
     region: 'Middle East',
     address: 'Burj Khalifa, Downtown Dubai, Dubai, UAE',
     phone: '+971 4 437 2100',
-    email: 'dubai@haryawn.com',
+    email: 'dubai@hilbrickrockle.pro',
     coordinates: { lat: 25.1972, lng: 55.2744 },
     timezone: 'GST',
     languages: ['English', 'French'],
@@ -103,7 +103,7 @@ const offices: Office[] = [
     region: 'Asia Pacific',
     address: 'Level 39, Governor Phillip Tower, 1 Farrer Place, Sydney NSW 2000',
     phone: '+61 2 9373 7000',
-    email: 'sydney@haryawn.com',
+    email: 'sydney@hilbrickrockle.pro',
     coordinates: { lat: -33.8688, lng: 151.2093 },
     timezone: 'AEST',
     languages: ['English'],
@@ -117,7 +117,7 @@ const offices: Office[] = [
     region: 'Asia Pacific',
     address: 'One International Finance Centre, 1 Harbour View Street, Central, Hong Kong',
     phone: '+852 2522 7888',
-    email: 'hongkong@haryawn.com',
+    email: 'hongkong@hilbrickrockle.pro',
     coordinates: { lat: 22.2783, lng: 114.1747 },
     timezone: 'HKT',
     languages: ['English', 'German'],
@@ -131,7 +131,7 @@ const offices: Office[] = [
     region: 'Europe',
     address: 'Taunustor 1, 60310 Frankfurt, Germany',
     phone: '+49 69 6062 6000',
-    email: 'frankfurt@haryawn.com',
+    email: 'frankfurt@hilbrickrockle.pro',
     coordinates: { lat: 50.1109, lng: 8.6821 },
     timezone: 'CET',
     languages: ['German', 'English', 'French'],
@@ -430,8 +430,8 @@ const OfficeMap: React.FC = () => {
                     <Image
                       src={filteredOffices[currentSlideIndex].image}
                       alt={`${filteredOffices[currentSlideIndex].city} Office`}
-                      layout="fill"
-                      objectFit="cover"
+                      fill
+                      style={{ objectFit: 'cover' }}
                       className="opacity-20"
                       priority
                     />
@@ -605,8 +605,8 @@ const OfficeMap: React.FC = () => {
                     <Image
                       src={office.image}
                       alt={`${office.city} Office`}
-                      layout="fill"
-                      objectFit="cover"
+                      fill
+                      style={{ objectFit: 'cover' }}
                       className={`transition-opacity duration-300 ${
                         currentSlideIndex === index ? 'opacity-100' : 'opacity-50'
                       }`}

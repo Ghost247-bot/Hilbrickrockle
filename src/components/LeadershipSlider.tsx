@@ -126,8 +126,7 @@ const LeadershipSlider: React.FC = () => {
                     src={leaders[currentSlide].image}
                     alt={leaders[currentSlide].name}
                     fill
-                    className="object-cover"
-                    priority
+                    style={{ objectFit: 'cover' }}
                     sizes="(max-width: 1024px) 100vw, 50vw"
                   />
                 </div>

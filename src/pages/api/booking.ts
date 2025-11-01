@@ -1,293 +1,596 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import sgMail from '@sendgrid/mail';
-import { isWeekend, isValid, addMonths, isBefore, isAfter } from 'date-fns';
-import { supabase } from '../../lib/supabase';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import formidable from 'formidable';
+import fs from 'fs';
+import path from 'path';
+import axios from 'axios';
+import { supabase, getSupabaseAdmin } from '../../lib/supabase';
+import { withErrorHandler } from '../../middleware/error';
+import { withRateLimit } from '../../middleware/rateLimit';
+import logger from '../../utils/logger';
 
-// Initialize SendGrid with API key if available
-if (process.env.SENDGRID_API_KEY?.startsWith('SG.')) {
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-}
+// Disable default body parser to handle file uploads
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
-interface ResponseData {
-  success: boolean;
+interface BookingData {
+  name: string;
+  email: string;
+  phone: string;
+  date: string;
+  time: string;
+  practiceArea: string;
+  lawyerId: string;
   message: string;
-  errors?: string[];
-  id?: string;
 }
 
-// Simple in-memory rate limiting
-const rateLimit = new Map<string, { count: number; timestamp: number }>();
-const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour
-const MAX_REQUESTS = 5;
-
-function getClientIp(req: NextApiRequest): string {
-  return req.headers['x-forwarded-for']?.toString() || 
-         req.socket.remoteAddress || 
-         'unknown';
+interface FileUpload {
+  filepath: string;
+  originalFilename?: string;
+  mimetype?: string;
 }
 
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const clientData = rateLimit.get(ip);
+// Validate booking data
+function validateBookingData(data: Partial<BookingData>): string[] {
+  const errors: string[] = [];
 
-  if (!clientData) {
-    rateLimit.set(ip, { count: 1, timestamp: now });
-    return false;
+  if (!data.name || data.name.trim().length < 2) {
+    errors.push('Name must be at least 2 characters long');
   }
 
-  if (now - clientData.timestamp > RATE_LIMIT_WINDOW) {
-    rateLimit.set(ip, { count: 1, timestamp: now });
-    return false;
+  if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+    errors.push('Please provide a valid email address');
   }
 
-  if (clientData.count >= MAX_REQUESTS) {
-    return true;
+  if (!data.date) {
+    errors.push('Please select a preferred date');
   }
 
-  clientData.count++;
-  return false;
+  if (!data.time) {
+    errors.push('Please select a preferred time');
+  }
+
+  if (!data.practiceArea) {
+    errors.push('Please select a practice area');
+  }
+
+  // lawyerId is optional, no validation needed
+
+  return errors;
 }
 
-// Format date to a readable string
-const formatDate = (date: string): string => {
-  return new Date(date).toLocaleDateString('en-US', {
+// Convert file to base64
+function fileToBase64(filePath: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, (err, data) => {
+      if (err) reject(err);
+      else resolve(data.toString('base64'));
+    });
+  });
+}
+
+// Send email via MailerSend API
+async function sendBookingEmail(
+  bookingData: BookingData,
+  attachments: Array<{ filename: string; content: string; type: string }> = []
+): Promise<void> {
+  const mailerSendApiKey = process.env.MAILERSEND_API_KEY;
+  const mailerSendFromEmail = process.env.MAILERSEND_FROM_EMAIL || 'noreply@yourdomain.com';
+  const mailerSendFromName = process.env.MAILERSEND_FROM_NAME || 'Hilbrick&Rockle Legal';
+  const notificationEmail = process.env.NOTIFICATION_EMAIL || mailerSendFromEmail;
+
+  if (!mailerSendApiKey) {
+    throw new Error('MailerSend API key is not configured');
+  }
+
+  // Fetch lawyer information
+  let lawyerInfo: any = null;
+  if (bookingData.lawyerId) {
+    try {
+      const supabaseAdmin = getSupabaseAdmin();
+      const { data: lawyer } = await supabaseAdmin
+        .from('lawyers')
+        .select('lawyer_id, name, email, practice_areas')
+        .eq('lawyer_id', bookingData.lawyerId)
+        .single();
+      lawyerInfo = lawyer;
+    } catch (error) {
+      logger.error('Error fetching lawyer info', { lawyerId: bookingData.lawyerId, error });
+    }
+  }
+
+  // Format date and time
+  const appointmentDate = new Date(`${bookingData.date}T${bookingData.time}`);
+  const formattedDate = appointmentDate.toLocaleDateString('en-US', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
   });
-};
+  const formattedTime = appointmentDate.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
 
-// Validate email format
-const isValidEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
+  // Customer confirmation email
+  const customerEmailHtml = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+          <h1 style="color: white; margin: 0;">Appointment Confirmation</h1>
+        </div>
+        <div style="background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e5e7eb;">
+          <p>Dear ${bookingData.name},</p>
+          <p>Thank you for booking an appointment with Hilbrick&Rockle. We have received your appointment request and will review it shortly.</p>
+          
+          <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #2563eb;">
+            <h2 style="color: #2563eb; margin-top: 0;">Appointment Details</h2>
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold; width: 150px;">Date:</td>
+                <td style="padding: 8px 0;">${formattedDate}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold;">Time:</td>
+                <td style="padding: 8px 0;">${formattedTime}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold;">Practice Area:</td>
+                <td style="padding: 8px 0;">${bookingData.practiceArea}</td>
+              </tr>
+              ${lawyerInfo ? `
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold;">Assigned Lawyer:</td>
+                <td style="padding: 8px 0;">${lawyerInfo.name} (${lawyerInfo.lawyer_id})</td>
+              </tr>
+              ` : `
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold;">Assigned Lawyer:</td>
+                <td style="padding: 8px 0; font-style: italic; color: #6b7280;">To be assigned</td>
+              </tr>
+              `}
+              ${bookingData.phone ? `
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold;">Phone:</td>
+                <td style="padding: 8px 0;">${bookingData.phone}</td>
+              </tr>
+              ` : ''}
+            </table>
+          </div>
 
-// Validate phone number format
-const isValidPhone = (phone: string): boolean => {
-  const phoneRegex = /^\+?[\d\s-]{10,}$/;
-  return phoneRegex.test(phone);
-};
+          ${bookingData.message ? `
+          <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="color: #2563eb; margin-top: 0;">Additional Information:</h3>
+            <p style="white-space: pre-wrap;">${bookingData.message}</p>
+          </div>
+          ` : ''}
 
-// Validate time slot format and availability
-const isValidTimeSlot = (time: string): boolean => {
-  const validTimes = [
-    '09:00 AM', '10:00 AM', '11:00 AM',
-    '02:00 PM', '03:00 PM', '04:00 PM'
-  ];
-  return validTimes.includes(time);
-};
+          ${attachments.length > 0 ? `
+          <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="color: #2563eb; margin-top: 0;">Documents Submitted:</h3>
+            <ul style="margin: 0; padding-left: 20px;">
+              ${attachments.map(att => `<li>${att.filename}</li>`).join('')}
+            </ul>
+          </div>
+          ` : ''}
 
-// Validate practice area
-const isValidPracticeArea = (area: string): boolean => {
-  const validAreas = [
-    'Corporate Law',
-    'Intellectual Property',
-    'Employment Law',
-    'Real Estate',
-    'Litigation',
-    'Family Law',
-    'Criminal Defense',
-    'Immigration',
-    'Other'
-  ];
-  return validAreas.includes(area);
-};
+          <p>Our team will review your request and contact you to confirm your appointment. If you have any questions or need to make changes, please don't hesitate to contact us.</p>
+          
+          <p style="margin-top: 30px;">Best regards,<br><strong>Hilbrick&Rockle Legal Team</strong></p>
+        </div>
+      </body>
+    </html>
+  `;
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
-) {
-  // Only allow POST requests
-  if (req.method !== 'POST') {
-    return res.status(405).json({
-      success: false,
-      message: 'Method not allowed',
-    });
+  // Admin notification email
+  const adminEmailHtml = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+          <h1 style="color: white; margin: 0;">New Appointment Booking</h1>
+        </div>
+        <div style="background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e5e7eb;">
+          <p>A new appointment has been booked through the website.</p>
+          
+          <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #dc2626;">
+            <h2 style="color: #dc2626; margin-top: 0;">Booking Details</h2>
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold; width: 150px;">Name:</td>
+                <td style="padding: 8px 0;">${bookingData.name}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold;">Email:</td>
+                <td style="padding: 8px 0;"><a href="mailto:${bookingData.email}">${bookingData.email}</a></td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold;">Phone:</td>
+                <td style="padding: 8px 0;">${bookingData.phone || 'N/A'}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold;">Date:</td>
+                <td style="padding: 8px 0;">${formattedDate}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold;">Time:</td>
+                <td style="padding: 8px 0;">${formattedTime}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold;">Practice Area:</td>
+                <td style="padding: 8px 0;">${bookingData.practiceArea}</td>
+              </tr>
+              ${lawyerInfo ? `
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold;">Assigned Lawyer:</td>
+                <td style="padding: 8px 0;">${lawyerInfo.name} (${lawyerInfo.lawyer_id})</td>
+              </tr>
+              ` : `
+              <tr>
+                <td style="padding: 8px 0; font-weight: bold;">Assigned Lawyer:</td>
+                <td style="padding: 8px 0; font-style: italic; color: #6b7280;">Not selected - to be assigned</td>
+              </tr>
+              `}
+            </table>
+          </div>
+
+          ${bookingData.message ? `
+          <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="color: #dc2626; margin-top: 0;">Additional Information:</h3>
+            <p style="white-space: pre-wrap;">${bookingData.message}</p>
+          </div>
+          ` : ''}
+
+          ${attachments.length > 0 ? `
+          <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="color: #dc2626; margin-top: 0;">Documents Attached (${attachments.length}):</h3>
+            <ul style="margin: 0; padding-left: 20px;">
+              ${attachments.map(att => `<li>${att.filename}</li>`).join('')}
+            </ul>
+            <p style="margin-top: 10px; font-size: 14px; color: #666;">Documents are attached to this email.</p>
+          </div>
+          ` : ''}
+
+          <p style="margin-top: 30px;">Please review and confirm this appointment.</p>
+        </div>
+      </body>
+    </html>
+  `;
+
+  // Prepare MailerSend API payload for customer email
+  const customerEmailPayload: any = {
+    from: {
+      email: mailerSendFromEmail,
+      name: mailerSendFromName,
+    },
+    to: [
+      {
+        email: bookingData.email,
+        name: bookingData.name,
+      },
+    ],
+    subject: 'Appointment Confirmation - Hilbrick&Rockle',
+    html: customerEmailHtml,
+  };
+
+  // Add attachments if any
+  if (attachments.length > 0) {
+    customerEmailPayload.attachments = attachments.map(att => ({
+      filename: att.filename,
+      content: att.content,
+      type: att.type,
+    }));
+  }
+
+  // Prepare MailerSend API payload for admin email
+  const adminEmailPayload: any = {
+    from: {
+      email: mailerSendFromEmail,
+      name: mailerSendFromName,
+    },
+    to: [
+      {
+        email: notificationEmail,
+      },
+    ],
+    subject: `New Appointment Booking - ${bookingData.name}`,
+    html: adminEmailHtml,
+  };
+
+  // Add attachments if any
+  if (attachments.length > 0) {
+    adminEmailPayload.attachments = attachments.map(att => ({
+      filename: att.filename,
+      content: att.content,
+      type: att.type,
+    }));
   }
 
   try {
-    // Apply rate limiting
-    const clientIp = getClientIp(req);
-    if (isRateLimited(clientIp)) {
-      return res.status(429).json({
-        success: false,
-        message: 'Too many booking requests. Please try again after an hour.',
-      });
+    // Send both emails via MailerSend API
+    // Note: MailerSend API endpoint is /v1/email
+    const [customerResponse, adminResponse] = await Promise.all([
+      axios.post('https://api.mailersend.com/v1/email', customerEmailPayload, {
+        headers: {
+          'Authorization': `Bearer ${mailerSendApiKey}`,
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+      }),
+      axios.post('https://api.mailersend.com/v1/email', adminEmailPayload, {
+        headers: {
+          'Authorization': `Bearer ${mailerSendApiKey}`,
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+      }),
+    ]);
+
+    logger.info('Booking emails sent successfully', {
+      customerEmail: bookingData.email,
+      customerResponseStatus: customerResponse.status,
+      adminResponseStatus: adminResponse.status,
+    });
+  } catch (error: any) {
+    logger.error('Error sending booking emails via MailerSend', {
+      error: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+    });
+    throw new Error(`Failed to send confirmation emails: ${error.message}`);
+  }
+}
+
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'POST') {
+    logger.warn('Invalid method for booking submission', { method: req.method });
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    // Parse form data with files
+    const form = formidable({
+      uploadDir: path.join(process.cwd(), 'public', 'uploads', 'booking'),
+      keepExtensions: true,
+      maxFileSize: 10 * 1024 * 1024, // 10MB
+    });
+
+    // Ensure upload directory exists
+    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'booking');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
     }
 
-    const { name, email, phone, date, time, practiceArea, message } = req.body;
-    const errors: string[] = [];
+    const [fields, files] = await form.parse(req);
 
-    // Validate required fields
-    if (!name?.trim()) errors.push('Name is required');
-    if (!email?.trim()) errors.push('Email is required');
-    if (!phone?.trim()) errors.push('Phone number is required');
-    if (!date?.trim()) errors.push('Date is required');
-    if (!time?.trim()) errors.push('Time is required');
-    if (!practiceArea?.trim()) errors.push('Practice area is required');
+    // Extract booking data
+    const bookingData: BookingData = {
+      name: Array.isArray(fields.name) ? fields.name[0] : (fields.name || ''),
+      email: Array.isArray(fields.email) ? fields.email[0] : (fields.email || ''),
+      phone: Array.isArray(fields.phone) ? fields.phone[0] : (fields.phone || ''),
+      date: Array.isArray(fields.date) ? fields.date[0] : (fields.date || ''),
+      time: Array.isArray(fields.time) ? fields.time[0] : (fields.time || ''),
+      practiceArea: Array.isArray(fields.practiceArea) ? fields.practiceArea[0] : (fields.practiceArea || ''),
+      lawyerId: Array.isArray(fields.lawyerId) ? (fields.lawyerId[0] || '') : (fields.lawyerId || ''),
+      message: Array.isArray(fields.message) ? fields.message[0] : (fields.message || ''),
+    };
 
-    // Validate email format
-    if (email && !isValidEmail(email)) {
-      errors.push('Invalid email format');
+    // Log for debugging (remove in production)
+    logger.info('Booking data received', {
+      name: bookingData.name,
+      email: bookingData.email,
+      date: bookingData.date,
+      time: bookingData.time,
+      practiceArea: bookingData.practiceArea,
+      hasLawyerId: !!bookingData.lawyerId && bookingData.lawyerId.trim() !== '',
+      lawyerId: bookingData.lawyerId || 'none',
+    });
+
+    // Validate booking data
+    const validationErrors = validateBookingData(bookingData);
+    if (validationErrors.length > 0) {
+      logger.warn('Booking form validation failed', { errors: validationErrors });
+      return res.status(400).json({ errors: validationErrors });
     }
 
-    // Validate phone format
-    if (phone && !isValidPhone(phone)) {
-      errors.push('Invalid phone number format');
+    // Process file uploads - save files and store metadata
+    const attachments: Array<{ filename: string; content: string; type: string }> = [];
+    const documentMetadata: Array<{
+      filename: string;
+      path: string;
+      type: string;
+      size: number;
+      uploaded_at: string;
+    }> = [];
+    const fileKeys = Object.keys(files);
+    
+    // Ensure permanent storage directory exists
+    const permanentUploadDir = path.join(process.cwd(), 'public', 'uploads', 'booking');
+    if (!fs.existsSync(permanentUploadDir)) {
+      fs.mkdirSync(permanentUploadDir, { recursive: true });
     }
 
-    // Validate date
-    const bookingDate = new Date(date);
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const maxDate = addMonths(new Date(), 3);
-
-    if (!isValid(bookingDate)) {
-      errors.push('Invalid date format');
-    } else {
-      if (isWeekend(bookingDate)) {
-        errors.push('Bookings are not available on weekends');
-      }
-      if (isBefore(bookingDate, tomorrow)) {
-        errors.push('Booking date must be at least 1 day in advance');
-      }
-      if (isAfter(bookingDate, maxDate)) {
-        errors.push('Booking date cannot be more than 3 months in advance');
-      }
-    }
-
-    // Validate time slot
-    if (time && !isValidTimeSlot(time)) {
-      errors.push('Invalid time slot selected');
-    }
-
-    // Validate practice area
-    if (practiceArea && !isValidPracticeArea(practiceArea)) {
-      errors.push('Invalid practice area selected');
-    }
-
-    // Return if there are validation errors
-    if (errors.length > 0) {
-      return res.status(400).json({
-        success: false,
-        message: 'Validation failed',
-        errors
-      });
-    }
-
-    // Create appointment in Supabase
-    const { data: appointmentData, error: supabaseError } = await supabase
-      .from('appointments')
-      .insert([
-        {
-          name,
-          email,
-          phone: phone || null,
-          date: date,
-          time,
-          practice_area: practiceArea,
-          message: message || null,
-          status: 'pending',
-          created_at: new Date().toISOString(),
+    for (const key of fileKeys) {
+      const fileArray = files[key];
+      if (Array.isArray(fileArray) && fileArray.length > 0) {
+        const file = fileArray[0] as any;
+        if (file && file.filepath) {
+          try {
+            const originalFilename = file.originalFilename || `document_${key}`;
+            // Create unique filename with timestamp
+            const timestamp = Date.now();
+            const fileExt = path.extname(originalFilename);
+            const fileName = path.basename(originalFilename, fileExt);
+            const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9-_]/g, '_');
+            const uniqueFilename = `${sanitizedFileName}_${timestamp}${fileExt}`;
+            const permanentPath = path.join(permanentUploadDir, uniqueFilename);
+            
+            // Get file stats
+            const fileStats = fs.statSync(file.filepath);
+            const fileSize = fileStats.size;
+            
+            // Move file to permanent location
+            fs.copyFileSync(file.filepath, permanentPath);
+            
+            // Store document metadata
+            documentMetadata.push({
+              filename: originalFilename,
+              path: `/uploads/booking/${uniqueFilename}`,
+              type: file.mimetype || 'application/octet-stream',
+              size: fileSize,
+              uploaded_at: new Date().toISOString(),
+            });
+            
+            // Prepare for email attachment
+            const base64Content = await fileToBase64(permanentPath);
+            attachments.push({
+              filename: originalFilename,
+              content: base64Content,
+              type: file.mimetype || 'application/octet-stream',
+            });
+            
+            // Clean up temporary uploaded file
+            if (fs.existsSync(file.filepath)) {
+              fs.unlinkSync(file.filepath);
+            }
+          } catch (error) {
+            logger.error('Error processing file upload', { 
+              error: error instanceof Error ? error.message : 'Unknown error',
+              filename: file.originalFilename 
+            });
+          }
         }
-      ])
+      }
+    }
+
+    // Save booking to Supabase
+    // Build insert object - only include lawyer_id if it's provided and valid
+    const insertData: any = {
+      name: bookingData.name.trim(),
+      email: bookingData.email.trim(),
+      phone: bookingData.phone?.trim() || null,
+      date: bookingData.date,
+      time: bookingData.time,
+      practice_area: bookingData.practiceArea,
+      message: bookingData.message?.trim() || null,
+      status: 'pending',
+      documents: documentMetadata.length > 0 ? documentMetadata : null,
+    };
+
+    // Only add lawyer_id if provided, not empty, and not just whitespace
+    const lawyerIdValue = bookingData.lawyerId?.trim();
+    if (lawyerIdValue && lawyerIdValue !== '') {
+      insertData.lawyer_id = lawyerIdValue;
+    }
+    // If lawyer_id is not provided, don't include it (let database handle null with default)
+
+    logger.info('Attempting to insert booking', {
+      insertFields: Object.keys(insertData),
+      hasLawyerId: 'lawyer_id' in insertData,
+      lawyerId: insertData.lawyer_id || 'null',
+    });
+
+    // Use admin client for server-side operations to bypass RLS
+    const supabaseAdmin = getSupabaseAdmin();
+    
+    // First, check if the appointments table exists
+    const { data: tableCheck, error: tableCheckError } = await supabaseAdmin
+      .from('appointments')
+      .select('id')
+      .limit(1);
+    
+    if (tableCheckError) {
+      logger.error('Table check failed', { 
+        error: tableCheckError.message,
+        code: tableCheckError.code,
+        details: tableCheckError.details,
+        hint: tableCheckError.hint
+      });
+      
+      // Provide helpful error message
+      if (tableCheckError.message?.includes('does not exist') || tableCheckError.code === '42P01') {
+        return res.status(500).json({
+          error: 'Database table not found',
+          message: 'The appointments table does not exist in the database. Please run the database setup script in Supabase SQL Editor.',
+          details: 'See scripts/database-setup.sql for the table creation script.',
+        });
+      }
+    }
+
+    const { data: bookingRecord, error: supabaseError } = await supabaseAdmin
+      .from('appointments')
+      .insert([insertData])
       .select('id')
       .single();
 
     if (supabaseError) {
+      logger.error('Error saving booking to database', { 
+        error: supabaseError.message,
+        details: supabaseError.details,
+        hint: supabaseError.hint,
+        code: supabaseError.code,
+        insertData: { ...insertData, lawyer_id: insertData.lawyer_id || 'null' }
+      });
+      
+      // Provide more helpful error messages
+      let errorMessage = 'Failed to save booking to database';
+      if (supabaseError.message?.includes('column') && supabaseError.message?.includes('does not exist')) {
+        errorMessage = 'Database table structure needs to be updated. Please run the database setup script.';
+      } else if (supabaseError.message?.includes('foreign key') || supabaseError.message?.includes('violates foreign key')) {
+        errorMessage = 'Invalid lawyer selected. Please try again.';
+      } else if (supabaseError.message?.includes('permission denied') || supabaseError.message?.includes('RLS')) {
+        errorMessage = 'Database permissions issue. Please contact support.';
+      }
+      
       return res.status(500).json({
-        success: false,
-        message: 'Failed to create appointment',
-        errors: [supabaseError.message],
+        error: 'Failed to save booking',
+        message: errorMessage,
+        details: process.env.NODE_ENV === 'development' ? supabaseError.message : null,
+        hint: process.env.NODE_ENV === 'development' ? supabaseError.hint : null,
       });
     }
 
-    // Try to send emails if SendGrid is properly configured
-    if (process.env.SENDGRID_API_KEY?.startsWith('SG.') && process.env.SMTP_FROM && process.env.NOTIFICATION_EMAIL) {
-      try {
-        // Prepare client confirmation email
-        const clientEmail = {
-          to: email,
-          from: process.env.SMTP_FROM,
-          subject: 'Consultation Booking Confirmation - Haryawn Law Firm',
-          html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-              <h2 style="color: #1e40af;">Consultation Booking Confirmation</h2>
-              <p>Dear ${name},</p>
-              <p>Thank you for booking a consultation with Haryawn Law Firm. Here are your booking details:</p>
-              
-              <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                <p><strong>Date:</strong> ${formatDate(date)}</p>
-                <p><strong>Time:</strong> ${time}</p>
-                <p><strong>Practice Area:</strong> ${practiceArea}</p>
-              </div>
-
-              <p>Our team will review your booking and contact you shortly to confirm your appointment. If you need to make any changes or have questions, please don't hesitate to contact us.</p>
-              
-              ${message ? `
-              <div style="margin-top: 20px;">
-                <p><strong>Your Message:</strong></p>
-                <p style="background-color: #f3f4f6; padding: 15px; border-radius: 8px;">${message}</p>
-              </div>
-              ` : ''}
-              
-              <p style="margin-top: 20px; color: #4b5563; font-size: 0.875rem;">
-                Please note:
-                <ul style="margin-top: 0.5rem;">
-                  <li>Your booking is pending confirmation from our team</li>
-                  <li>We will contact you within 24 hours to confirm your appointment</li>
-                  <li>If you need to reschedule, please contact us at least 24 hours in advance</li>
-                </ul>
-              </p>
-              
-              <p style="margin-top: 20px;">Best regards,<br>Haryawn Law Firm</p>
-            </div>
-          `,
-        };
-
-        // Prepare notification email
-        const notificationEmail = {
-          to: process.env.NOTIFICATION_EMAIL,
-          from: process.env.SMTP_FROM,
-          subject: 'New Appointment Request',
-          text: `New appointment request from ${name} (${email})`,
-          html: `
-            <h2>New Appointment Request</h2>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
-            <p><strong>Date:</strong> ${date}</p>
-            <p><strong>Time:</strong> ${time}</p>
-            <p><strong>Practice Area:</strong> ${practiceArea}</p>
-            <p><strong>Message:</strong> ${message || 'No message provided'}</p>
-          `
-        };
-
-        // Send both emails
-        await Promise.all([
-          sgMail.send(clientEmail),
-          sgMail.send(notificationEmail)
-        ]);
-      } catch (emailError) {
-        console.error('Error sending emails:', emailError);
-        // Log the error but don't fail the booking
-      }
+    // Send emails via MailerSend
+    try {
+      await sendBookingEmail(bookingData, attachments);
+    } catch (emailError) {
+      logger.error('Error sending booking emails', { error: emailError });
+      // Don't fail the request if email fails, booking is still saved
     }
 
-    // Return success response
+    logger.info('Booking created successfully', {
+      bookingId: bookingRecord?.id,
+      email: bookingData.email,
+    });
+
     return res.status(200).json({
       success: true,
-      message: 'Appointment scheduled successfully',
-      id: appointmentData?.id,
+      message: 'Booking submitted successfully',
+      bookingId: bookingRecord?.id,
     });
   } catch (error) {
-    console.error('Booking submission error:', error);
+    logger.error('Error handling booking submission', {
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     return res.status(500).json({
-      success: false,
-      message: 'Failed to process your booking. Please try again later.',
-      errors: [(error as Error).message]
+      error: 'Internal server error',
+      message: error instanceof Error ? error.message : 'An unexpected error occurred',
     });
   }
-} 
+}
+
+export default withErrorHandler(withRateLimit(handler));
+

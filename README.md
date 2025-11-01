@@ -1,10 +1,10 @@
-# Haryawn Website Clone
+# Hilbrick-Rockle LAW Website Clone
 
 A professional legal firm website clone built with modern web technologies, focusing on user experience and accessibility.
 
 ## Project Overview
 
-This project aims to create a professional legal firm website clone that maintains the aesthetics of Haryawn while incorporating unique branding elements. The website will be fully responsive, accessible, and optimized for search engines.
+This project aims to create a professional legal firm website clone that maintains the aesthetics of Hilbrick-Rockle LAW while incorporating unique branding elements. The website will be fully responsive, accessible, and optimized for search engines.
 
 ## Key Features
 

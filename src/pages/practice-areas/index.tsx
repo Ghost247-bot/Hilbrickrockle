@@ -74,7 +74,7 @@ const PracticeAreasPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Practice Areas - Haryawn</title>
+        <title>Practice Areas - Hilbrick-Rockle LAW</title>
         <meta name="description" content="Explore our comprehensive legal practice areas and expertise." />
       </Head>
 

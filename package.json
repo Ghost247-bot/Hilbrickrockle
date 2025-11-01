@@ -1,5 +1,5 @@
 {
-  "name": "latham-watkins-clone",
+  "name": "Hilbrick-Rockle",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,14 @@
     "lint": "next lint",
     "test": "jest",
     "vercel-build": "npm run build",
-    "backend": "cd backend && npm run dev"
+    "backend": "cd backend && npm run dev",
+    "backend-new": "cd backend-new && npm run dev",
+    "verify-db": "ts-node scripts/verify-database.ts",
+    "setup-db": "echo 'Run scripts/database-setup.sql in Supabase SQL Editor'",
+    "test-db": "echo 'Visit http://localhost:3000/api/test-db-connection to test database'",
+    "create-admin": "ts-node scripts/create-admin-user.ts",
+    "create-admin-quick": "ts-node scripts/create-admin-via-api.ts",
+    "insert-team": "ts-node scripts/insert-leadership-team.ts"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -36,7 +43,7 @@
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.483.0",
     "mongoose": "^8.0.1",
-    "next": "14.0.3",
+    "next": "14.2.33",
     "nodemailer": "^6.10.0",
     "postcss": "^8.4.35",
     "react": "^18.2.0",

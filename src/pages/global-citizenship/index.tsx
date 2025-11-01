@@ -118,8 +118,8 @@ const GlobalCitizenshipPage: NextPage = () => {
                 <Image
                   src={initiative.image}
                   alt={initiative.title}
-                  layout="fill"
-                  objectFit="cover"
+                  fill
+                  style={{ objectFit: 'cover' }}
                   className="group-hover:scale-103 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 p-6 flex flex-col justify-end z-20">

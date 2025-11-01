@@ -8,7 +8,7 @@ import { FiArrowRight, FiLoader } from 'react-icons/fi';
 const allNewsItems = [
   {
     id: 1,
-    title: 'Haryawn Law Expands Technology Practice with New Partner Hire',
+    title: 'Hilbrick-Rockle LAW Law Expands Technology Practice with New Partner Hire',
     excerpt: 'Leading technology lawyer joins our growing practice to strengthen our capabilities in AI and data privacy.',
     category: 'Firm News',
     date: 'March 15, 2024',
@@ -28,7 +28,7 @@ const allNewsItems = [
   },
   {
     id: 3,
-    title: 'Haryawn Law Named Top Firm for Innovation',
+    title: 'Hilbrick-Rockle LAW Law Named Top Firm for Innovation',
     excerpt: 'Recognition for our innovative approach to legal service delivery and technology adoption.',
     category: 'Awards',
     date: 'March 13, 2024',
@@ -119,7 +119,7 @@ const NewsList: React.FC = () => {
                   src={item.image}
                   alt={item.title}
                   fill
-                  className="object-cover"
+                  style={{ objectFit: 'cover' }}
                 />
               </div>
               <div className="flex-1 p-6 md:p-8">
