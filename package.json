@@ -57,6 +57,7 @@
     "winston": "^3.17.0"
   },
   "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.14.4",
     "@types/bcryptjs": "^2.4.6",
     "@types/express": "^4.17.21",
     "@types/formidable": "^3.4.5",
