@@ -24,7 +24,7 @@ interface BookingFormData {
 interface Lawyer {
   lawyer_id: string;
   name: string;
-  practice_areas: string[];
+  practice_areas: string | string[]; // Can be string (comma-separated) or array
   bio?: string;
   experience_years?: number;
   title?: string;
@@ -99,7 +99,24 @@ const BookingPage: React.FC = () => {
           const data = await response.json();
           console.log('Lawyers data received:', data);
           console.log('Number of lawyers:', data.lawyers?.length || 0);
-          setLawyers(data.lawyers || []);
+          
+          // Transform practice_areas from string to array if needed
+          const processedLawyers = (data.lawyers || []).map((lawyer: Lawyer) => ({
+            ...lawyer,
+            practice_areas: Array.isArray(lawyer.practice_areas) 
+              ? lawyer.practice_areas 
+              : typeof lawyer.practice_areas === 'string' && lawyer.practice_areas.trim()
+                ? lawyer.practice_areas.split(',').map(area => area.trim()).filter(area => area.length > 0)
+                : []
+          }));
+          
+          setLawyers(processedLawyers);
+          if (processedLawyers.length === 0 && data.lawyers?.length === 0) {
+            console.warn('No lawyers returned from API');
+            setErrorMessage('No lawyers available in the database. Please contact support or try again later.');
+          } else {
+            setErrorMessage(''); // Clear any previous errors if we got lawyers
+          }
         }
       } catch (error) {
         console.error('Error fetching lawyers:', error);
@@ -417,6 +434,12 @@ const BookingPage: React.FC = () => {
                     </svg>
                     <span className="text-gray-600">Loading lawyers...</span>
                   </div>
+                ) : errorMessage && lawyers.length === 0 ? (
+                  <div className="w-full px-4 py-3 border border-red-300 rounded-lg bg-red-50">
+                    <p className="text-sm text-red-700">
+                      {errorMessage || 'No lawyers available at the moment. You can still proceed with the booking.'}
+                    </p>
+                  </div>
                 ) : lawyers.length === 0 ? (
                   <div className="w-full px-4 py-3 border border-orange-300 rounded-lg bg-orange-50">
                     <p className="text-sm text-orange-700">
@@ -432,37 +455,57 @@ const BookingPage: React.FC = () => {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
                     <option value="">Select a lawyer</option>
-                    {lawyers.map((lawyer) => (
-                      <option key={lawyer.lawyer_id} value={lawyer.lawyer_id}>
-                        {lawyer.name}
-                        {lawyer.title && ` - ${lawyer.title}`}
-                        {lawyer.practice_areas && lawyer.practice_areas.length > 0 && 
-                          ` (${lawyer.practice_areas.join(', ')})`
-                        }
-                      </option>
-                    ))}
+                    {lawyers.map((lawyer) => {
+                      const practiceAreas = Array.isArray(lawyer.practice_areas) 
+                        ? lawyer.practice_areas 
+                        : typeof lawyer.practice_areas === 'string' && lawyer.practice_areas.trim()
+                          ? lawyer.practice_areas.split(',').map(area => area.trim()).filter(area => area.length > 0)
+                          : [];
+                      
+                      return (
+                        <option key={lawyer.lawyer_id} value={lawyer.lawyer_id}>
+                          {lawyer.name}
+                          {lawyer.title && ` - ${lawyer.title}`}
+                          {practiceAreas.length > 0 && ` (${practiceAreas.join(', ')})`}
+                        </option>
+                      );
+                    })}
                   </select>
                 )}
-                {formData.lawyerId && lawyers.find(l => l.lawyer_id === formData.lawyerId) && (
-                  <div className="mt-2 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                    <p className="text-sm font-medium text-blue-900">
-                      {lawyers.find(l => l.lawyer_id === formData.lawyerId)?.name}
-                      {lawyers.find(l => l.lawyer_id === formData.lawyerId)?.title && 
-                        `, ${lawyers.find(l => l.lawyer_id === formData.lawyerId)?.title}`
-                      }
-                    </p>
-                    {lawyers.find(l => l.lawyer_id === formData.lawyerId)?.bio && (
-                      <p className="text-xs text-blue-700 mt-1">
-                        {lawyers.find(l => l.lawyer_id === formData.lawyerId)?.bio}
+                {formData.lawyerId && lawyers.find(l => l.lawyer_id === formData.lawyerId) && (() => {
+                  const selectedLawyer = lawyers.find(l => l.lawyer_id === formData.lawyerId);
+                  const practiceAreas = selectedLawyer ? (
+                    Array.isArray(selectedLawyer.practice_areas) 
+                      ? selectedLawyer.practice_areas 
+                      : typeof selectedLawyer.practice_areas === 'string' && selectedLawyer.practice_areas.trim()
+                        ? selectedLawyer.practice_areas.split(',').map(area => area.trim()).filter(area => area.length > 0)
+                        : []
+                  ) : [];
+                  
+                  return (
+                    <div className="mt-2 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                      <p className="text-sm font-medium text-blue-900">
+                        {selectedLawyer?.name}
+                        {selectedLawyer?.title && `, ${selectedLawyer.title}`}
                       </p>
-                    )}
-                    {lawyers.find(l => l.lawyer_id === formData.lawyerId)?.experience_years && (
-                      <p className="text-xs text-blue-600 mt-1">
-                        {lawyers.find(l => l.lawyer_id === formData.lawyerId)?.experience_years} years of experience
-                      </p>
-                    )}
-                  </div>
-                )}
+                      {practiceAreas.length > 0 && (
+                        <p className="text-xs text-blue-700 mt-1">
+                          Practice Areas: {practiceAreas.join(', ')}
+                        </p>
+                      )}
+                      {selectedLawyer?.bio && (
+                        <p className="text-xs text-blue-700 mt-1">
+                          {selectedLawyer.bio}
+                        </p>
+                      )}
+                      {selectedLawyer?.experience_years && (
+                        <p className="text-xs text-blue-600 mt-1">
+                          {selectedLawyer.experience_years} years of experience
+                        </p>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
 
               {/* Message */}
