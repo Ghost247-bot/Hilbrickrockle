@@ -34,16 +34,24 @@ Netlify should auto-detect these settings from `netlify.toml`, but verify:
 - **Publish directory**: `.next`
 - **Node version**: 18.x (set in netlify.toml)
 
-## Step 4: Set Environment Variables
+## Step 4: Set Environment Variables ⚠️ CRITICAL
 
-1. In your Netlify site dashboard, go to **Site settings** → **Environment variables**
-2. Add the following variables (click **"Add variable"** for each):
+**⚠️ IMPORTANT: Without these environment variables, your build will fail!**
 
-### Required Variables
+1. In your Netlify site dashboard, go to **Site settings** → **Build & deploy** → **Environment** → **Environment variables**
+2. Click **"Add variable"** for each variable below
+3. **These must be set before your first deployment**
 
+### Required Variables (MUST SET BEFORE BUILD)
+
+**Critical for Build Success:**
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
+```
+
+**Required for Full Functionality:**
+```
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
 SUPABASE_JWT_SECRET=your_jwt_secret_here
 MAILERSEND_API_KEY=your_mailersend_api_key_here
@@ -52,6 +60,8 @@ MAILERSEND_FROM_NAME=Your Legal Firm Name
 NOTIFICATION_EMAIL=admin@yourdomain.com
 ADMIN_EMAIL=admin@yourdomain.com
 ```
+
+**Note:** The build will now complete even without env vars (using placeholder), but the app won't function properly. Always set at least `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` for production.
 
 ### How to Get Supabase Keys
 
@@ -109,10 +119,14 @@ ADMIN_EMAIL=admin@yourdomain.com
 - Netlify free tier has 15-minute build limit
 - Consider upgrading or optimizing build
 
-**Error: Environment variables not found**
-- Verify all variables are set in Netlify dashboard
-- Ensure variable names match exactly (case-sensitive)
-- Redeploy after adding variables
+**Error: Missing Supabase environment variables / Build fails during page data collection**
+- **Symptoms**: Build fails at "Collecting page data" for admin pages with error about missing Supabase env vars
+- **Solution**: 
+  1. Go to **Site settings** → **Build & deploy** → **Environment** → **Environment variables**
+  2. Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` (required)
+  3. Ensure variable names match exactly (case-sensitive, including `NEXT_PUBLIC_` prefix)
+  4. Redeploy after adding variables
+- **Note**: With the latest code changes, builds will complete even without env vars (using placeholder), but admin pages won't work. Always set env vars for production.
 
 ### API Routes Not Working
 
