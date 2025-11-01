@@ -1,13 +1,16 @@
 [build]
   command = "npm run build"
   publish = ".next"
+  # Explicit install command with legacy peer deps flag
+  install = "npm install --legacy-peer-deps"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
 [build.environment]
   NODE_VERSION = "18"
-  NPM_FLAGS = "--legacy-peer-deps"
+  # Also set as environment variable for npm commands
+  NPM_CONFIG_LEGACY_PEER_DEPS = "true"
 
 # Note: @netlify/plugin-nextjs automatically handles Next.js routing
 # No manual redirects needed for API routes or pages
