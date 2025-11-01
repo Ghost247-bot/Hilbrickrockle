@@ -2,7 +2,8 @@ import React from 'react';
 import Head from 'next/head';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { FiCalculator, FiFileText, FiCheckSquare, FiSearch, FiDownload, FiShield } from 'react-icons/fi';
+import { FiFileText, FiCheckSquare, FiSearch, FiDownload, FiShield } from 'react-icons/fi';
+import { MdCalculate } from 'react-icons/md';
 
 const LegalToolsPage: React.FC = () => {
   const tools = [
@@ -15,7 +16,7 @@ const LegalToolsPage: React.FC = () => {
       available: true,
     },
     {
-      icon: <FiCalculator className="w-8 h-8" />,
+      icon: <MdCalculate className="w-8 h-8" />,
       title: 'Legal Calculators',
       description: 'Interactive calculators for common legal calculations and assessments.',
       category: 'Calculators',

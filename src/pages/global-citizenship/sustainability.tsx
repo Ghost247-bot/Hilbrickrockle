@@ -2,19 +2,20 @@ import React from 'react';
 import Head from 'next/head';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { FiArrowLeft, FiLeaf, FiRecycle, FiZap, FiAward, FiTrendingDown } from 'react-icons/fi';
+import { FiArrowLeft, FiZap, FiAward, FiTrendingDown } from 'react-icons/fi';
+import { MdNature, MdRecycling } from 'react-icons/md';
 
 const SustainabilityPage: React.FC = () => {
   const initiatives = [
     {
       title: 'Carbon Neutrality',
       description: 'Committed to achieving carbon neutrality across all operations by 2030 through renewable energy and offset programs.',
-      icon: <FiLeaf className="w-12 h-12" />,
+      icon: <MdNature className="w-12 h-12" />,
     },
     {
       title: 'Waste Reduction',
       description: 'Implementing paperless operations, recycling programs, and circular economy principles throughout the firm.',
-      icon: <FiRecycle className="w-12 h-12" />,
+      icon: <MdRecycling className="w-12 h-12" />,
     },
     {
       title: 'Sustainable Procurement',
@@ -25,9 +26,9 @@ const SustainabilityPage: React.FC = () => {
 
   const stats = [
     { value: '40%', label: 'Carbon Footprint Reduction Goal', icon: <FiTrendingDown /> },
-    { value: '95%', label: 'Paperless Operations', icon: <FiRecycle /> },
+    { value: '95%', label: 'Paperless Operations', icon: <MdRecycling /> },
     { value: '100%', label: 'Renewable Energy', icon: <FiZap /> },
-    { value: '50+', label: 'Sustainability Initiatives', icon: <FiLeaf /> },
+    { value: '50+', label: 'Sustainability Initiatives', icon: <MdNature /> },
   ];
 
   const achievements = [
