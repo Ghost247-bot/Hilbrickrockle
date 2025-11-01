@@ -77,6 +77,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         return res.status(400).json({ error: 'Missing required fields: lawyer_id, name, email' });
       }
 
+      const supabaseAdmin = getSupabaseAdmin();
       const { data, error } = await supabaseAdmin
         .from('lawyers')
         .insert([{
@@ -131,6 +132,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         return res.status(400).json({ error: 'Missing required field: id' });
       }
 
+      const supabaseAdmin = getSupabaseAdmin();
       // Only update provided fields - let database trigger handle updated_at if it exists
       const { data, error } = await supabaseAdmin
         .from('lawyers')
@@ -178,6 +180,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         return res.status(400).json({ error: 'Missing required field: id' });
       }
 
+      const supabaseAdmin = getSupabaseAdmin();
       const { error } = await supabaseAdmin
         .from('lawyers')
         .delete()

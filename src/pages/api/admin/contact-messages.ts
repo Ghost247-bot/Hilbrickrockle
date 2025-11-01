@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSupabaseAdmin } from '../../../lib/supabase';
+import { withErrorHandler } from '../../../middleware/error';
 import { requireAdmin } from '../../../utils/api-auth';
 import logger from '../../../utils/logger';
 
@@ -155,5 +156,5 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   return res.status(405).json({ error: 'Method not allowed' });
 }
 
-export default handler;
+export default withErrorHandler(handler);
 
