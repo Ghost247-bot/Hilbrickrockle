@@ -67,12 +67,57 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       });
     }
     
-    // Fetch active lawyers from Supabase with all fields
-    const { data: lawyers, error } = await supabaseAdmin
+    // Fetch lawyers from Supabase - try with specific fields first
+    let allLawyers: any[] | null = null;
+    let queryError: any = null;
+    
+    // First attempt: fetch with specific fields
+    const { data: specificData, error: specificError } = await supabaseAdmin
       .from('lawyers')
       .select('lawyer_id, name, email, phone, practice_areas, bio, experience_years, status, title, image_url, ref_code')
-      .eq('status', 'active')
       .order('name', { ascending: true });
+    
+    if (specificError) {
+      queryError = specificError;
+      safeLog('warn', 'Error fetching with specific fields, trying with all fields', { 
+        error: specificError.message 
+      });
+      
+      // Second attempt: fetch all fields if specific fields failed
+      const { data: allData, error: allDataError } = await supabaseAdmin
+        .from('lawyers')
+        .select('*')
+        .order('name', { ascending: true });
+      
+      if (!allDataError && allData) {
+        allLawyers = allData.map((law: any) => ({
+          lawyer_id: law.lawyer_id || law.id,
+          name: law.name,
+          email: law.email,
+          phone: law.phone,
+          practice_areas: law.practice_areas || [],
+          bio: law.bio,
+          experience_years: law.experience_years,
+          status: law.status || 'active',
+          title: law.title,
+          image_url: law.image_url,
+          ref_code: law.ref_code,
+        }));
+        queryError = null; // Clear error since we got data
+      } else {
+        queryError = allDataError || specificError;
+      }
+    } else {
+      allLawyers = specificData;
+    }
+    
+    // Filter to active lawyers only (if status field exists)
+    const lawyers = (allLawyers || []).filter((lawyer: any) => {
+      // Include lawyer if status is active or status field doesn't exist
+      return !lawyer.status || lawyer.status === 'active';
+    });
+    
+    const error = queryError;
 
     if (error) {
       safeLog('error', 'Error fetching lawyers', { 
@@ -121,13 +166,21 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     const lawyerCount = lawyers?.length || 0;
-    safeLog('info', 'Lawyers fetched successfully', { count: lawyerCount });
+    
+    // Log detailed info for debugging
+    safeLog('info', 'Lawyers fetch attempt completed', { 
+      count: lawyerCount,
+      totalFound: allLawyers?.length || 0,
+      hasError: !!error,
+      errorMessage: error ? (error as any).message : null
+    });
 
     // Log warning if no lawyers found (helpful for debugging)
-    if (lawyerCount === 0) {
+    if (lawyerCount === 0 && !error) {
       safeLog('warn', 'No active lawyers found in database', {
         message: 'The lawyers table may be empty or all lawyers have inactive status',
-        suggestion: 'Run the database setup script or insert-leadership-team.sql to populate lawyers',
+        suggestion: 'Check Supabase Table Editor to verify lawyers exist and have status="active"',
+        totalInTable: allLawyers?.length || 0,
       });
     }
 
@@ -135,6 +188,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       success: true,
       lawyers: lawyers || [],
       count: lawyerCount,
+      debug: process.env.NODE_ENV === 'development' ? {
+        totalInTable: allLawyers?.length || 0,
+        filteredCount: lawyerCount,
+        error: error ? (error as any).message : null,
+      } : undefined,
     });
   } catch (error) {
     safeLog('error', 'Error handling lawyers request', {
