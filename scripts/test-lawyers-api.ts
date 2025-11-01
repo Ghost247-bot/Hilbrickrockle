@@ -39,7 +39,7 @@ async function testLawyersAPI() {
       return;
     }
 
-    const data = await response.json();
+    const data: any = await response.json();
     
     console.log('✅ Response Data:');
     console.log(JSON.stringify(data, null, 2));
