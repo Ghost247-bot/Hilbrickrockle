@@ -100,8 +100,8 @@ const LegalOpsManagerPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Apply: Legal Operations Manager - Los Angeles, CA | Hilbrick-Rockle LAW</title>
-        <meta name="description" content="Apply for the Legal Operations Manager position at Hilbrick-Rockle LAW in Los Angeles, CA." />
+        <title>Apply: Legal Operations Manager - Los Angeles, CA | HilbrickRockle</title>
+        <meta name="description" content="Apply for the Legal Operations Manager position at HilbrickRockle in Los Angeles, CA." />
       </Head>
 
       {/* Hero Section */}

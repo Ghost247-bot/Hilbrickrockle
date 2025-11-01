@@ -13,7 +13,7 @@ const LatinAmericaPracticePage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Latin America Practice - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Latin America Practice - Capabilities | HilbrickRockle</title>
         <meta name="description" content="Latin American business law expertise" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

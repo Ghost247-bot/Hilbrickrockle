@@ -55,7 +55,7 @@ const ProBonoPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Pro Bono & Community Service - Hilbrick-Rockle LAW</title>
+        <title>Pro Bono & Community Service - HilbrickRockle</title>
         <meta name="description" content="Learn about our pro bono legal services and community engagement initiatives." />
       </Head>
 
@@ -104,7 +104,7 @@ const ProBonoPage: React.FC = () => {
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-6">Our Commitment to Service</h2>
               <p className="text-xl text-gray-700 leading-relaxed mb-8">
-                At Hilbrick-Rockle LAW, we believe that access to justice is a fundamental right, not a privilege. 
+                At HilbrickRockle, we believe that access to justice is a fundamental right, not a privilege. 
                 Our pro bono program is at the heart of our commitment to public service and community engagement.
               </p>
               <p className="text-lg text-gray-600 leading-relaxed">

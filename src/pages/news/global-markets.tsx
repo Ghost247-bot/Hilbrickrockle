@@ -33,7 +33,7 @@ const GlobalMarketsPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Global Markets | Hilbrick-Rockle LAW</title>
+        <title>Global Markets | HilbrickRockle</title>
         <meta name="description" content="Insights on global markets, international trade, and cross-border transactions." />
       </Head>
 

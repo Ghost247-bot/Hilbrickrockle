@@ -59,7 +59,7 @@ const Footer = () => {
           {/* Logo and Description */}
           <div className="flex items-center mb-6 lg:mb-0">
             <Link href="/" className="text-xl font-bold">
-              Hilbrick-Rockle LAW
+              HilbrickRockle
             </Link>
           </div>
 
@@ -112,10 +112,10 @@ const Footer = () => {
         <div className="border-t border-gray-800 pt-6 mt-6">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <p className="text-gray-400 text-sm max-w-3xl">
-              Notice: We appreciate your interest in Hilbrick-Rockle LAW. If your inquiry relates to a legal matter and you are not already a current client of the firm, please do not transmit any confidential information to us.
+              Notice: We appreciate your interest in HilbrickRockle. If your inquiry relates to a legal matter and you are not already a current client of the firm, please do not transmit any confidential information to us.
             </p>
             <div className="text-gray-400 text-sm whitespace-nowrap">
-              © {new Date().getFullYear()} Hilbrick-Rockle LAW. All rights reserved.
+              © {new Date().getFullYear()} HilbrickRockle. All rights reserved.
             </div>
           </div>
         </div>

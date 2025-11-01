@@ -23,7 +23,7 @@ interface NewsArticle {
 const newsArticles: NewsArticle[] = [
   {
     id: 1,
-    title: 'Hilbrick-Rockle LAW Law Expands Technology Practice with New Partner Hire',
+    title: 'HilbrickRockle Law Expands Technology Practice with New Partner Hire',
     excerpt: 'Leading technology lawyer joins our growing practice to strengthen our capabilities in AI and data privacy.',
     content: `
       <p>We are pleased to announce that Sarah Chen has joined our firm as a Partner in the Technology Practice. 
@@ -41,7 +41,7 @@ const newsArticles: NewsArticle[] = [
       in our practice areas, particularly in AI governance and data privacy compliance.</p>
       
       <h2>Experience and Background</h2>
-      <p>Prior to joining Hilbrick-Rockle LAW, Sarah served as in-house counsel at a leading technology company, where she 
+      <p>Prior to joining HilbrickRockle, Sarah served as in-house counsel at a leading technology company, where she 
       managed complex data privacy programs and advised on international regulatory compliance. Her experience spans 
       across GDPR, CCPA, and other emerging data protection frameworks.</p>
       
@@ -114,7 +114,7 @@ const NewsDetailPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>{article.title} | Hilbrick-Rockle LAW</title>
+        <title>{article.title} | HilbrickRockle</title>
         <meta name="description" content={article.excerpt} />
       </Head>
 

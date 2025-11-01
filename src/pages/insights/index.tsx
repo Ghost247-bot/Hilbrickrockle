@@ -11,7 +11,7 @@ const InsightsPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Insights | Hilbrick-Rockle LAW Law</title>
+        <title>Insights | HilbrickRockle Law</title>
         <meta name="description" content="Stay informed with our latest legal insights, articles, and updates." />
       </Head>
 

@@ -13,7 +13,7 @@ const TechnologyPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Technology - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Technology - Capabilities | HilbrickRockle</title>
         <meta name="description" content="Technology sector legal services" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

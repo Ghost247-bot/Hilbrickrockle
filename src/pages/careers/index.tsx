@@ -62,8 +62,8 @@ const CareersPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Careers - Hilbrick-Rockle LAW</title>
-        <meta name="description" content="Join our team of exceptional legal professionals and build your career at Hilbrick-Rockle LAW." />
+        <title>Careers - HilbrickRockle</title>
+        <meta name="description" content="Join our team of exceptional legal professionals and build your career at HilbrickRockle." />
       </Head>
 
       {/* Hero Section */}
@@ -72,7 +72,7 @@ const CareersPage: React.FC = () => {
           <img
             className="w-full h-full object-cover opacity-50"
             src="/images/careers/hero.jpg"
-            alt="Careers at Hilbrick-Rockle LAW"
+            alt="Careers at HilbrickRockle"
           />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
@@ -181,7 +181,7 @@ const CareersPage: React.FC = () => {
               <div className="text-4xl mb-4">🎉</div>
               <h3 className="text-xl font-bold mb-2">Join Our Team</h3>
               <p className="text-gray-600">
-                Begin your journey with Hilbrick-Rockle LAW
+                Begin your journey with HilbrickRockle
               </p>
             </motion.div>
           </div>

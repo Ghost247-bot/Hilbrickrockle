@@ -7,8 +7,8 @@ const TrainingPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Training & Development - Hilbrick-Rockle LAW</title>
-        <meta name="description" content="Professional development and training programs at Hilbrick-Rockle LAW." />
+        <title>Training & Development - HilbrickRockle</title>
+        <meta name="description" content="Professional development and training programs at HilbrickRockle." />
       </Head>
 
       {/* Hero Section */}

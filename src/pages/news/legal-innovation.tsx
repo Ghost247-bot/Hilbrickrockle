@@ -33,7 +33,7 @@ const LegalInnovationPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Legal Innovation | Hilbrick-Rockle LAW</title>
+        <title>Legal Innovation | HilbrickRockle</title>
         <meta name="description" content="Exploring innovation in legal practice and technology adoption." />
       </Head>
 
@@ -106,7 +106,7 @@ const LegalInnovationPage: React.FC = () => {
           >
             <p className="text-xl text-gray-700 leading-relaxed mb-6">
               The legal industry is experiencing unprecedented transformation as innovative technologies 
-              reshape how legal services are delivered, accessed, and consumed. At Hilbrick-Rockle LAW, we are at 
+              reshape how legal services are delivered, accessed, and consumed. At HilbrickRockle, we are at 
               the forefront of this evolution, leveraging cutting-edge tools and methodologies to enhance 
               our practice and better serve our clients.
             </p>
@@ -171,7 +171,7 @@ const LegalInnovationPage: React.FC = () => {
             </p>
 
             <p className="text-gray-700 leading-relaxed mt-8">
-              As the legal industry continues to evolve, Hilbrick-Rockle LAW will remain a leader in innovation, 
+              As the legal industry continues to evolve, HilbrickRockle will remain a leader in innovation, 
               continuously exploring new ways to enhance our services and deliver exceptional value to 
               our clients.
             </p>

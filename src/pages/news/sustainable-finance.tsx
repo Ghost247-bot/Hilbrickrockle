@@ -33,7 +33,7 @@ const SustainableFinancePage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Sustainable Finance | Hilbrick-Rockle LAW</title>
+        <title>Sustainable Finance | HilbrickRockle</title>
         <meta name="description" content="Exploring sustainable finance and ESG investment trends in legal practice." />
       </Head>
 
@@ -188,7 +188,7 @@ const SustainableFinancePage: React.FC = () => {
             </p>
 
             <p className="text-gray-700 leading-relaxed mt-8">
-              At Hilbrick-Rockle LAW, our ESG and financial services teams work together to provide comprehensive 
+              At HilbrickRockle, our ESG and financial services teams work together to provide comprehensive 
               counsel on sustainable finance matters, helping clients navigate this complex and rapidly 
               evolving landscape.
             </p>

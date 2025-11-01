@@ -7,7 +7,7 @@ const TermsPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Terms of Service - Hilbrick-Rockle LAW</title>
+        <title>Terms of Service - HilbrickRockle</title>
         <meta name="description" content="Read our terms of service and understand the legal conditions for using our website." />
       </Head>
 
@@ -38,7 +38,7 @@ const TermsPage: React.FC = () => {
           >
             <h2 className="text-3xl font-bold mb-6">1. Agreement to Terms</h2>
             <p className="text-gray-700 mb-6">
-              By accessing or using the website and services of Hilbrick-Rockle LAW (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;), 
+              By accessing or using the website and services of HilbrickRockle (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;), 
               you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do 
               not agree with any of these terms, you are prohibited from using or accessing this website.
             </p>
@@ -95,7 +95,7 @@ const TermsPage: React.FC = () => {
             <h2 className="text-3xl font-bold mb-6 mt-12">7. Intellectual Property Rights</h2>
             <p className="text-gray-700 mb-6">
               All content on this website, including but not limited to text, graphics, logos, images, and software, 
-              is the property of Hilbrick-Rockle LAW or its content suppliers and is protected by copyright, trademark, and other 
+              is the property of HilbrickRockle or its content suppliers and is protected by copyright, trademark, and other 
               intellectual property laws. You may not reproduce, distribute, or create derivative works without our 
               express written permission.
             </p>
@@ -108,14 +108,14 @@ const TermsPage: React.FC = () => {
 
             <h2 className="text-3xl font-bold mb-6 mt-12">9. Limitation of Liability</h2>
             <p className="text-gray-700 mb-6">
-              To the fullest extent permitted by law, Hilbrick-Rockle LAW shall not be liable for any direct, indirect, incidental, 
+              To the fullest extent permitted by law, HilbrickRockle shall not be liable for any direct, indirect, incidental, 
               special, consequential, or punitive damages arising out of or related to your use of this website or the 
               services provided, regardless of the theory of liability.
             </p>
 
             <h2 className="text-3xl font-bold mb-6 mt-12">10. Indemnification</h2>
             <p className="text-gray-700 mb-6">
-              You agree to indemnify, defend, and hold harmless Hilbrick-Rockle LAW and its affiliates from any claims, damages, 
+              You agree to indemnify, defend, and hold harmless HilbrickRockle and its affiliates from any claims, damages, 
               losses, liabilities, and expenses (including attorneys&apos; fees) arising out of or related to your use 
               of the website or violation of these Terms of Service.
             </p>
@@ -149,7 +149,7 @@ const TermsPage: React.FC = () => {
 
             <h2 className="text-3xl font-bold mb-6 mt-12">15. Entire Agreement</h2>
             <p className="text-gray-700 mb-6">
-              These Terms of Service constitute the entire agreement between you and Hilbrick-Rockle LAW regarding your use of 
+              These Terms of Service constitute the entire agreement between you and HilbrickRockle regarding your use of 
               this website and supersede all prior or contemporaneous agreements, understandings, or communications.
             </p>
 
@@ -159,7 +159,7 @@ const TermsPage: React.FC = () => {
             </p>
             <div className="bg-gray-50 p-6 rounded-lg mb-6">
               <p className="text-gray-700 mb-2">
-                <strong>Hilbrick-Rockle LAW</strong><br />
+                <strong>HilbrickRockle</strong><br />
                 Email: legal@hrlaw.com<br />
                 Phone: +1 (555) 123-4567<br />
                 Address: 123 Legal Avenue, Suite 100, City, State 12345

@@ -59,7 +59,7 @@ const EventsPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Events - Hilbrick-Rockle LAW</title>
+        <title>Events - HilbrickRockle</title>
         <meta name="description" content="Join us for upcoming events, webinars, and conferences featuring our legal experts." />
       </Head>
 

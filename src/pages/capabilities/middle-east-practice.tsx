@@ -13,7 +13,7 @@ const MiddleEastPracticePage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Middle East Practice - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Middle East Practice - Capabilities | HilbrickRockle</title>
         <meta name="description" content="Middle East regional legal counsel" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

@@ -52,7 +52,7 @@ const SustainabilityPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Environmental Sustainability - Hilbrick-Rockle LAW</title>
+        <title>Environmental Sustainability - HilbrickRockle</title>
         <meta name="description" content="Our commitment to environmental stewardship and sustainable practices." />
       </Head>
 

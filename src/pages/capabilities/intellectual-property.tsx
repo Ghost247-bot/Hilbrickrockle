@@ -13,7 +13,7 @@ const IntellectualPropertyPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Intellectual Property - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Intellectual Property - Capabilities | HilbrickRockle</title>
         <meta name="description" content="IP protection, patents, trademarks, and copyright" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

@@ -13,7 +13,7 @@ const ArtificialIntelligencePage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Artificial Intelligence - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Artificial Intelligence - Capabilities | HilbrickRockle</title>
         <meta name="description" content="AI and machine learning legal services" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

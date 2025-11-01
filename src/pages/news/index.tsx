@@ -8,7 +8,7 @@ const NewsPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>News & Insights | Hilbrick-Rockle LAW Law</title>
+        <title>News & Insights | HilbrickRockle Law</title>
         <meta name="description" content="Stay informed with our latest legal news, insights, and updates." />
       </Head>
 

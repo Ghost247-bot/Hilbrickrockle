@@ -13,7 +13,7 @@ const AutomotivePage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Automotive - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Automotive - Capabilities | HilbrickRockle</title>
         <meta name="description" content="Automotive industry legal counsel" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

@@ -13,7 +13,7 @@ const PrivacyAndCyberPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Privacy & Cyber - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Privacy & Cyber - Capabilities | HilbrickRockle</title>
         <meta name="description" content="Privacy compliance and cybersecurity law" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

@@ -12,21 +12,21 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    quote: "Hilbrick-Rockle LAW's expertise in corporate law has been invaluable to our business. Their team's dedication and professionalism are unmatched.",
+    quote: "HilbrickRockle's expertise in corporate law has been invaluable to our business. Their team's dedication and professionalism are unmatched.",
     author: "Sarah Johnson",
     position: "CEO",
     company: "TechCorp International",
     image: "/images/testimonials/testimonial-1.jpg"
   },
   {
-    quote: "The litigation team at Hilbrick-Rockle LAW provided exceptional representation in our complex case. Their strategic approach led to a successful outcome.",
+    quote: "The litigation team at HilbrickRockle provided exceptional representation in our complex case. Their strategic approach led to a successful outcome.",
     author: "Michael Chen",
     position: "General Counsel",
     company: "Global Industries Ltd",
     image: "/images/testimonials/testimonial-2.jpg"
   },
   {
-    quote: "Working with Hilbrick-Rockle LAW's real estate team has been a game-changer for our property development projects. Their attention to detail is remarkable.",
+    quote: "Working with HilbrickRockle's real estate team has been a game-changer for our property development projects. Their attention to detail is remarkable.",
     author: "Emily Rodriguez",
     position: "Director of Operations",
     company: "Urban Development Group",

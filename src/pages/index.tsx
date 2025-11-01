@@ -104,8 +104,8 @@ const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen">
       <Head>
-        <title>Hilbrick-Rockle LAW - Global Law Firm</title>
-        <meta name="description" content="Hilbrick-Rockle LAW is a global law firm providing comprehensive legal services across various practice areas." />
+        <title>HilbrickRockle - Global Law Firm</title>
+        <meta name="description" content="HilbrickRockle is a global law firm providing comprehensive legal services across various practice areas." />
       </Head>
 
       {/* Hero Slideshow */}

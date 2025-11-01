@@ -67,7 +67,7 @@ const LegalToolsPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Legal Tools & Resources - Hilbrick-Rockle LAW</title>
+        <title>Legal Tools & Resources - HilbrickRockle</title>
         <meta name="description" content="Access interactive legal tools, calculators, and templates." />
       </Head>
 

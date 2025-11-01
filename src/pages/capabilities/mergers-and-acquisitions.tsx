@@ -13,7 +13,7 @@ const MergersAndAcquisitionsPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Mergers & Acquisitions - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Mergers & Acquisitions - Capabilities | HilbrickRockle</title>
         <meta name="description" content="M&A transactions and deal structuring" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

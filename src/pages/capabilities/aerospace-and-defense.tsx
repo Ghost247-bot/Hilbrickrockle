@@ -13,7 +13,7 @@ const AerospaceAndDefensePage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Aerospace & Defense - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Aerospace & Defense - Capabilities | HilbrickRockle</title>
         <meta name="description" content="Legal services for aerospace and defense industries" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

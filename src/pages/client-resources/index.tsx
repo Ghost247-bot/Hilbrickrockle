@@ -83,8 +83,8 @@ const ClientResourcesPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Client Resources - Hilbrick-Rockle LAW</title>
-        <meta name="description" content="Access tools, publications, and resources for Hilbrick-Rockle LAW clients." />
+        <title>Client Resources - HilbrickRockle</title>
+        <meta name="description" content="Access tools, publications, and resources for HilbrickRockle clients." />
       </Head>
 
       {/* Hero Section */}

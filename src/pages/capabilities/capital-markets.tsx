@@ -13,7 +13,7 @@ const CapitalMarketsPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Capital Markets - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Capital Markets - Capabilities | HilbrickRockle</title>
         <meta name="description" content="Capital markets transactions and securities law" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

@@ -55,7 +55,7 @@ const ClientPortalPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Client Portal - Hilbrick-Rockle LAW</title>
+        <title>Client Portal - HilbrickRockle</title>
         <meta name="description" content="Secure client portal for accessing your legal documents and case information." />
       </Head>
 

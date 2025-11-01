@@ -13,7 +13,7 @@ const HealthcareAndLifeSciencesPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Healthcare & Life Sciences - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Healthcare & Life Sciences - Capabilities | HilbrickRockle</title>
         <meta name="description" content="Healthcare law and life sciences regulation" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

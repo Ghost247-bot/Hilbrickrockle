@@ -48,7 +48,7 @@ const DiversityPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Belong As You Are - Hilbrick-Rockle LAW</title>
+        <title>Belong As You Are - HilbrickRockle</title>
         <meta name="description" content="Our commitment to diversity, equity, and inclusion." />
       </Head>
 

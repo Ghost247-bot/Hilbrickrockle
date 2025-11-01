@@ -52,7 +52,7 @@ const WomenEnrichingBusinessPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Women Enriching Business - Hilbrick-Rockle LAW</title>
+        <title>Women Enriching Business - HilbrickRockle</title>
         <meta name="description" content="Promoting the success and advancement of women in law and business." />
       </Head>
 

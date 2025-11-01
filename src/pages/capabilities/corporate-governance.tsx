@@ -13,7 +13,7 @@ const CorporateGovernancePage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Corporate Governance - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Corporate Governance - Capabilities | HilbrickRockle</title>
         <meta name="description" content="Corporate governance and board advisory services" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

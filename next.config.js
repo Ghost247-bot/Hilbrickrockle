@@ -4,10 +4,20 @@ const nextConfig = {
   swcMinify: true,
   images: {
     domains: ['localhost', 'vercel.com'],
-    unoptimized: true,
+    unoptimized: false, // Netlify supports image optimization
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.supabase.co',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.netlify.app',
+      },
+    ],
   },
-  // Enable standalone output for production (compatible with Netlify)
-  ...(process.env.NODE_ENV === 'production' && process.env.NETLIFY !== 'true' && { output: 'standalone' }),
+  // Disable standalone output for Netlify (uses plugin instead)
+  output: undefined,
   // Disable source maps in production
   productionBrowserSourceMaps: false,
   // Trailing slashes configuration

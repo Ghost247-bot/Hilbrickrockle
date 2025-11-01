@@ -13,7 +13,7 @@ const RealEstatePage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Real Estate - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Real Estate - Capabilities | HilbrickRockle</title>
         <meta name="description" content="Real estate law and property transactions" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

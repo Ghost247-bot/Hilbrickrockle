@@ -13,7 +13,7 @@ const EuropeanPracticePage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>European Practice - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>European Practice - Capabilities | HilbrickRockle</title>
         <meta name="description" content="European Union and UK legal services" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

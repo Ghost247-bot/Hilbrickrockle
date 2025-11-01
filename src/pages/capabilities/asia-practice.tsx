@@ -13,7 +13,7 @@ const AsiaPracticePage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Asia Practice - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Asia Practice - Capabilities | HilbrickRockle</title>
         <meta name="description" content="Asia-Pacific regional legal expertise" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

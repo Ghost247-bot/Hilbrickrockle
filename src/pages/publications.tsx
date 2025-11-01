@@ -86,7 +86,7 @@ const PublicationsPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Publications - Hilbrick-Rockle LAW</title>
+        <title>Publications - HilbrickRockle</title>
         <meta name="description" content="Access our library of legal guides, articles, whitepapers, and publications." />
       </Head>
 

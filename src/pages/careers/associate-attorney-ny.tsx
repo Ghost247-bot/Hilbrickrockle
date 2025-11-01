@@ -100,8 +100,8 @@ const AssociateAttorneyPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Apply: Associate Attorney - Lincoln, Nebraska | Hilbrick-Rockle LAW</title>
-        <meta name="description" content="Apply for the Associate Attorney position in Corporate Law at Hilbrick-Rockle LAW in Lincoln, Nebraska." />
+        <title>Apply: Associate Attorney - Lincoln, Nebraska | HilbrickRockle</title>
+        <meta name="description" content="Apply for the Associate Attorney position in Corporate Law at HilbrickRockle in Lincoln, Nebraska." />
       </Head>
 
       {/* Hero Section */}

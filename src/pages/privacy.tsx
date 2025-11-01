@@ -7,7 +7,7 @@ const PrivacyPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Privacy Policy - Hilbrick-Rockle LAW</title>
+        <title>Privacy Policy - HilbrickRockle</title>
         <meta name="description" content="Read our privacy policy and learn how we protect your personal information." />
       </Head>
 
@@ -38,7 +38,7 @@ const PrivacyPage: React.FC = () => {
           >
             <h2 className="text-3xl font-bold mb-6">1. Introduction</h2>
             <p className="text-gray-700 mb-6">
-              Hilbrick-Rockle LAW (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy 
+              HilbrickRockle (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy 
               explains how we collect, use, disclose, and safeguard your information when you visit our website 
               and use our services.
             </p>
@@ -133,7 +133,7 @@ const PrivacyPage: React.FC = () => {
             </p>
             <div className="bg-gray-50 p-6 rounded-lg mb-6">
               <p className="text-gray-700 mb-2">
-                <strong>Hilbrick-Rockle LAW</strong><br />
+                <strong>HilbrickRockle</strong><br />
                 Email: privacy@hrlaw.com<br />
                 Phone: +1 (555) 123-4567<br />
                 Address: 123 Legal Avenue, Suite 100, City, State 12345

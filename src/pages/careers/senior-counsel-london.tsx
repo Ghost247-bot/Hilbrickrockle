@@ -100,8 +100,8 @@ const SeniorCounselPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Apply: Senior Counsel - London, UK | Hilbrick-Rockle LAW</title>
-        <meta name="description" content="Apply for the Senior Counsel position in Litigation at Hilbrick-Rockle LAW in London, UK." />
+        <title>Apply: Senior Counsel - London, UK | HilbrickRockle</title>
+        <meta name="description" content="Apply for the Senior Counsel position in Litigation at HilbrickRockle in London, UK." />
       </Head>
 
       {/* Hero Section */}

@@ -13,7 +13,7 @@ const BankingPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Banking - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Banking - Capabilities | HilbrickRockle</title>
         <meta name="description" content="Banking and financial services regulation" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

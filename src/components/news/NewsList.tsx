@@ -8,7 +8,7 @@ import { FiArrowRight, FiLoader } from 'react-icons/fi';
 const allNewsItems = [
   {
     id: 1,
-    title: 'Hilbrick-Rockle LAW Law Expands Technology Practice with New Partner Hire',
+    title: 'HilbrickRockle Law Expands Technology Practice with New Partner Hire',
     excerpt: 'Leading technology lawyer joins our growing practice to strengthen our capabilities in AI and data privacy.',
     category: 'Firm News',
     date: 'March 15, 2024',
@@ -28,7 +28,7 @@ const allNewsItems = [
   },
   {
     id: 3,
-    title: 'Hilbrick-Rockle LAW Law Named Top Firm for Innovation',
+    title: 'HilbrickRockle Law Named Top Firm for Innovation',
     excerpt: 'Recognition for our innovative approach to legal service delivery and technology adoption.',
     category: 'Awards',
     date: 'March 13, 2024',

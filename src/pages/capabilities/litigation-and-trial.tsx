@@ -13,7 +13,7 @@ const LitigationAndTrialPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Litigation & Trial - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Litigation & Trial - Capabilities | HilbrickRockle</title>
         <meta name="description" content="Complex commercial litigation and trial representation" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

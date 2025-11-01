@@ -50,7 +50,7 @@ const Header: React.FC = () => {
               whileTap={{ scale: 0.95 }}
             >
               <Link href="/" className="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors">
-                Hilbrick-Rockle LAW
+                HilbrickRockle
               </Link>
             </motion.div>
 

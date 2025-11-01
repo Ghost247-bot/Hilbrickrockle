@@ -106,8 +106,8 @@ const SummerAssociatePage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Apply: Summer Associate Program | Hilbrick-Rockle LAW</title>
-        <meta name="description" content="Apply for the Summer Associate Program at Hilbrick-Rockle LAW. Multiple locations available." />
+        <title>Apply: Summer Associate Program | HilbrickRockle</title>
+        <meta name="description" content="Apply for the Summer Associate Program at HilbrickRockle. Multiple locations available." />
       </Head>
 
       {/* Hero Section */}

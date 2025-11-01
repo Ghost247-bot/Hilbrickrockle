@@ -13,7 +13,7 @@ const DigitalAssetsAndWeb3Page: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Digital Assets & Web3 - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Digital Assets & Web3 - Capabilities | HilbrickRockle</title>
         <meta name="description" content="Blockchain, cryptocurrency, and Web3 legal services" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

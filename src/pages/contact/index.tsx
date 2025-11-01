@@ -118,8 +118,8 @@ const ContactPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Contact Us - Hilbrick-Rockle LAW</title>
-        <meta name="description" content="Get in touch with Hilbrick-Rockle LAW. Find our office locations and contact information." />
+        <title>Contact Us - HilbrickRockle</title>
+        <meta name="description" content="Get in touch with HilbrickRockle. Find our office locations and contact information." />
       </Head>
 
       {/* Hero Section */}

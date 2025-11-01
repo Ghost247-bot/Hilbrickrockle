@@ -13,7 +13,7 @@ const FinancialInstitutionsPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Financial Institutions - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Financial Institutions - Capabilities | HilbrickRockle</title>
         <meta name="description" content="Banking and financial services legal counsel" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

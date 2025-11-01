@@ -13,7 +13,7 @@ const EnergyAndInfrastructurePage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Energy & Infrastructure - Capabilities | Hilbrick-Rockle LAW</title>
+        <title>Energy & Infrastructure - Capabilities | HilbrickRockle</title>
         <meta name="description" content="Energy law and infrastructure projects" />
       </Head>
       <section className="relative h-[50vh] bg-gradient-to-br from-blue-900 to-indigo-900 text-white">

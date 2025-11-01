@@ -1,10 +1,10 @@
-# Hilbrick-Rockle LAW Website
+# HilbrickRockle Website
 
 A professional legal firm website built with modern web technologies, focusing on user experience and accessibility.
 
 ## Project Overview
 
-This project is a professional legal firm website for Hilbrick-Rockle LAW. The website is fully responsive, accessible, and optimized for search engines.
+This project is a professional legal firm website for HilbrickRockle. The website is fully responsive, accessible, and optimized for search engines.
 
 ## Key Features
 
@@ -150,9 +150,19 @@ src/
 ## Deployment
 
 The application can be deployed using:
-- Vercel for frontend hosting
-- Supabase for database
+- **Netlify** (recommended) - See [NETLIFY_DEPLOYMENT.md](./NETLIFY_DEPLOYMENT.md) for detailed setup instructions
+- **Vercel** - Alternative hosting option
+- **Supabase** - Database and authentication
 - Environment variables for configuration
+
+### Quick Netlify Deployment
+
+1. Push your code to GitHub/GitLab/Bitbucket
+2. Connect your repository to Netlify
+3. Set environment variables in Netlify dashboard
+4. Deploy automatically on every push
+
+See `NETLIFY_DEPLOYMENT.md` for complete setup guide.
 
 ## Contributing
 
