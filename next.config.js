@@ -6,8 +6,8 @@ const nextConfig = {
     domains: ['localhost', 'vercel.com'],
     unoptimized: true,
   },
-  // Enable static exports only in production (standalone mode interferes with dev server WebSocket)
-  ...(process.env.NODE_ENV === 'production' && { output: 'standalone' }),
+  // Enable standalone output for production (compatible with Netlify)
+  ...(process.env.NODE_ENV === 'production' && process.env.NETLIFY !== 'true' && { output: 'standalone' }),
   // Disable source maps in production
   productionBrowserSourceMaps: false,
   // Trailing slashes configuration
