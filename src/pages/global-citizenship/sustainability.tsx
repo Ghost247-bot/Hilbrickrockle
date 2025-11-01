@@ -78,7 +78,7 @@ const SustainabilityPage: React.FC = () => {
             className="max-w-3xl"
           >
             <div className="flex items-center mb-6">
-              <FiLeaf className="w-12 h-12 mr-4 text-green-300" />
+              <MdNature className="w-12 h-12 mr-4 text-green-300" />
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold">
                 Environmental Sustainability
               </h1>
