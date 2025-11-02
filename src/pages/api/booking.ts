@@ -363,27 +363,39 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
+    // Use temp directory for serverless environments (Netlify, Vercel, etc.)
+    // On serverless platforms, /tmp is the only writable directory
+    // Check multiple environment variables to detect serverless
+    const isServerless = 
+      process.env.VERCEL || 
+      process.env.NETLIFY_DEPLOY_PRIME_URL || 
+      process.env.AWS_LAMBDA_FUNCTION_NAME ||
+      process.env.NETLIFY;
+    
+    const tempDir = isServerless 
+      ? '/tmp' 
+      : path.join(process.cwd(), 'public', 'uploads', 'booking');
+    
     // Ensure upload directory exists first
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'booking');
     try {
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
+      if (!fs.existsSync(tempDir)) {
+        fs.mkdirSync(tempDir, { recursive: true });
       }
     } catch (dirError: any) {
       logger.error('Error creating upload directory', {
         error: dirError instanceof Error ? dirError.message : 'Unknown error',
+        tempDir,
       });
-      return res.status(500).json({
-        error: 'Server configuration error',
-        message: 'Failed to create upload directory. Please contact support.',
-      });
+      console.error('Error creating upload directory:', dirError.message);
+      // Don't fail in serverless - continue without file storage
+      logger.warn('Continuing without file storage - serverless environment detected');
     }
 
     // Parse form data with files
     let form: any;
     try {
       form = formidable({
-        uploadDir: uploadDir,
+        uploadDir: tempDir,
         keepExtensions: true,
         maxFileSize: 10 * 1024 * 1024, // 10MB
         multiples: true,
@@ -480,19 +492,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
       const fileKeys = Object.keys(files || {});
       
-      // Ensure permanent storage directory exists
-      const permanentUploadDir = path.join(process.cwd(), 'public', 'uploads', 'booking');
-      try {
-        if (!fs.existsSync(permanentUploadDir)) {
-          fs.mkdirSync(permanentUploadDir, { recursive: true });
-        }
-      } catch (dirError: any) {
-        logger.error('Error creating permanent upload directory', {
-          error: dirError instanceof Error ? dirError.message : 'Unknown error',
-        });
-        // Don't fail the request, just log the error
-      }
-
+      // In serverless environments (Netlify, Vercel, etc.), we only process files for email attachments
+      // Files are not permanently stored on the filesystem
+      const isServerless = 
+        process.env.VERCEL || 
+        process.env.NETLIFY_DEPLOY_PRIME_URL || 
+        process.env.AWS_LAMBDA_FUNCTION_NAME ||
+        process.env.NETLIFY;
+      
       for (const key of fileKeys) {
         const fileArray = files[key];
         if (Array.isArray(fileArray) && fileArray.length > 0) {
@@ -500,13 +507,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           if (file && file.filepath) {
             try {
               const originalFilename = file.originalFilename || `document_${key}`;
-              // Create unique filename with timestamp
-              const timestamp = Date.now();
-              const fileExt = path.extname(originalFilename);
-              const fileName = path.basename(originalFilename, fileExt);
-              const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9-_]/g, '_');
-              const uniqueFilename = `${sanitizedFileName}_${timestamp}${fileExt}`;
-              const permanentPath = path.join(permanentUploadDir, uniqueFilename);
               
               // Get file stats
               let fileSize = 0;
@@ -517,29 +517,52 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
                 logger.warn('Could not get file stats', { filename: originalFilename });
               }
               
-              // Move file to permanent location
-              try {
-                fs.copyFileSync(file.filepath, permanentPath);
-              } catch (copyError: any) {
-                logger.error('Error copying file to permanent location', {
-                  error: copyError instanceof Error ? copyError.message : 'Unknown error',
+              // Store document metadata for database record
+              // Note: In serverless, we don't store files permanently
+              if (!isServerless) {
+                // Local development: try to save to permanent location
+                try {
+                  const permanentUploadDir = path.join(process.cwd(), 'public', 'uploads', 'booking');
+                  if (!fs.existsSync(permanentUploadDir)) {
+                    fs.mkdirSync(permanentUploadDir, { recursive: true });
+                  }
+                  
+                  const timestamp = Date.now();
+                  const fileExt = path.extname(originalFilename);
+                  const fileName = path.basename(originalFilename, fileExt);
+                  const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9-_]/g, '_');
+                  const uniqueFilename = `${sanitizedFileName}_${timestamp}${fileExt}`;
+                  const permanentPath = path.join(permanentUploadDir, uniqueFilename);
+                  
+                  // Move file to permanent location
+                  fs.copyFileSync(file.filepath, permanentPath);
+                  
+                  documentMetadata.push({
+                    filename: originalFilename,
+                    path: `/uploads/booking/${uniqueFilename}`,
+                    type: file.mimetype || 'application/octet-stream',
+                    size: fileSize,
+                    uploaded_at: new Date().toISOString(),
+                  });
+                } catch (permanentSaveError) {
+                  logger.warn('Could not save file to permanent location, files will only be in emails', {
+                    filename: originalFilename,
+                  });
+                }
+              } else {
+                // Serverless: just store basic metadata
+                documentMetadata.push({
                   filename: originalFilename,
+                  path: 'attached-to-email', // Indicate files are in emails only
+                  type: file.mimetype || 'application/octet-stream',
+                  size: fileSize,
+                  uploaded_at: new Date().toISOString(),
                 });
-                continue; // Skip this file but continue processing
               }
-              
-              // Store document metadata
-              documentMetadata.push({
-                filename: originalFilename,
-                path: `/uploads/booking/${uniqueFilename}`,
-                type: file.mimetype || 'application/octet-stream',
-                size: fileSize,
-                uploaded_at: new Date().toISOString(),
-              });
               
               // Prepare for email attachment
               try {
-                const base64Content = await fileToBase64(permanentPath);
+                const base64Content = await fileToBase64(file.filepath);
                 attachments.push({
                   filename: originalFilename,
                   content: base64Content,
@@ -680,11 +703,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       bookingRecord = result.data;
       supabaseError = result.error;
     } catch (insertException: any) {
+      const errorMsg = insertException instanceof Error ? insertException.message : 'Unknown error';
       logger.error('Exception during booking insert', {
-        error: insertException instanceof Error ? insertException.message : 'Unknown error',
+        error: errorMsg,
         stack: insertException instanceof Error ? insertException.stack : undefined,
         insertData: { ...insertData, lawyer_id: insertData.lawyer_id || 'null' }
       });
+      console.error('Exception during booking insert:', errorMsg, insertException);
       supabaseError = insertException;
     }
 
@@ -696,6 +721,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         code: supabaseError.code,
         insertData: { ...insertData, lawyer_id: insertData.lawyer_id || 'null' }
       });
+      console.error('Error saving booking to database:', supabaseError.message, supabaseError);
       
       // Provide more helpful error messages
       let errorMessage = 'Failed to save booking to database';
