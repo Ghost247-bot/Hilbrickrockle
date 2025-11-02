@@ -369,6 +369,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Check content-type for form data
+  const contentType = req.headers['content-type'] || '';
+  if (!contentType.includes('multipart/form-data')) {
+    logger.warn('Invalid content-type for booking submission', { contentType });
+    // Don't fail immediately - formidable might still work
+  }
+
   try {
     console.log('Starting booking processing...');
     // Use temp directory for serverless environments (Netlify, Vercel, etc.)
@@ -414,15 +421,21 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     let form: any;
     try {
       // Configure formidable - always use tempDir (will be /tmp for serverless)
+      // For Netlify/serverless, we need to ensure the directory exists and is writable
       form = formidable({
         uploadDir: tempDir,
         keepExtensions: true,
         maxFileSize: 10 * 1024 * 1024, // 10MB
         multiples: true,
+        // In serverless, files may need different handling
+        allowEmptyFiles: false,
+        minFileSize: 0,
       });
     } catch (formError: any) {
       logger.error('Error creating formidable form', {
         error: formError instanceof Error ? formError.message : 'Unknown error',
+        tempDir,
+        isServerless,
       });
       console.error('Error creating formidable form:', formError.message, 'tempDir:', tempDir);
       return res.status(500).json({
@@ -433,12 +446,22 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     let fields: any, files: any;
     try {
+      // Ensure req stream is readable for formidable
+      if (!req.readable) {
+        logger.warn('Request stream may not be readable');
+      }
       [fields, files] = await form.parse(req);
+      logger.info('Form parsed successfully', {
+        fieldCount: Object.keys(fields || {}).length,
+        fileCount: Object.keys(files || {}).length,
+      });
     } catch (parseError: any) {
       const errorMsg = parseError instanceof Error ? parseError.message : 'Unknown parse error';
       logger.error('Error parsing form data', {
         error: errorMsg,
         code: parseError?.code,
+        isServerless,
+        tempDir,
         stack: parseError instanceof Error ? parseError.stack : undefined,
       });
       console.error('Error parsing form data:', errorMsg, 'Code:', parseError?.code);
@@ -789,47 +812,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-// Wrap handler with additional error catching to ensure JSON responses
-const wrappedHandler = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log('Booking API wrappedHandler called');
-  
-  // Set JSON content type immediately
-  res.setHeader('Content-Type', 'application/json');
-  
-  try {
-    // Ensure response hasn't been sent
-    if (res.headersSent) {
-      console.log('Response already sent, skipping handler');
-      return;
-    }
-    
-    console.log('Calling handler with middleware...');
-    // Call the actual handler wrapped in middleware
-    await withErrorHandler(withRateLimit(handler))(req, res);
-    console.log('Handler completed successfully');
-  } catch (error: any) {
-    console.error('CATCH-ALL ERROR in wrappedHandler:', error instanceof Error ? error.message : 'Unknown error', error);
-    
-    // Final catch-all - ensures we always return JSON
-    if (!res.headersSent) {
-      logger.error('Unhandled error in booking API wrapper', {
-        error: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined,
-      });
-      
-      try {
-        res.status(500).json({
-          error: 'Internal server error',
-          message: error instanceof Error ? error.message : 'An unexpected error occurred',
-        });
-      } catch (sendError) {
-        // Response already sent, log only
-        logger.error('Failed to send error response', { sendError });
-        console.error('Failed to send error response:', sendError);
-      }
-    }
-  }
-};
+// Wrap handler with middleware
+const wrappedHandler = withErrorHandler(withRateLimit(handler));
 
 export default wrappedHandler;
 
