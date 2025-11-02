@@ -74,13 +74,24 @@ npm run dev
 ```
 
 ### Netlify Testing
-1. Deploy to Netlify
+1. Deploy to Netlify (wait for deployment to complete)
 2. Visit your Netlify URL + `/booking`
 3. Submit booking form
 4. Check: 
    - Booking appears in Supabase `appointments` table
    - Emails sent with attachments
    - `documents` field shows `'attached-to-email'` paths
+
+### Checking Netlify Logs (If Issues Persist)
+1. Go to Netlify Dashboard → Your Site
+2. Click **Functions** in the sidebar
+3. Find the `/api/booking` function
+4. View logs for `console.error` messages
+5. Look for error messages about:
+   - Directory creation
+   - Formidable initialization
+   - Form data parsing
+   - Database insertion
 
 ## File Storage Behavior
 
