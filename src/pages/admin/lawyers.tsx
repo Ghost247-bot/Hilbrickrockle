@@ -215,18 +215,18 @@ const AdminLawyers = () => {
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
+      <div className="space-y-4 sm:space-y-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Lawyers</h1>
-            <p className="mt-2 text-gray-600">Manage lawyer profiles</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Lawyers</h1>
+            <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">Manage lawyer profiles</p>
           </div>
           <button
             onClick={() => {
               resetForm();
               setShowModal(true);
             }}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="w-full sm:w-auto px-3 sm:px-4 py-2 text-sm sm:text-base bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             Add Lawyer
           </button>
@@ -246,83 +246,84 @@ const AdminLawyers = () => {
           </div>
         ) : (
           <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      ID
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Name
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Email
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Practice Areas
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Experience
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {lawyers.map((lawyer) => (
-                    <tr key={lawyer.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {lawyer.lawyer_id}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{lawyer.name}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{lawyer.email}</div>
-                        {lawyer.phone && (
-                          <div className="text-sm text-gray-500">{lawyer.phone}</div>
-                        )}
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="text-sm text-gray-900">
-                          {lawyer.practice_areas.join(', ')}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {lawyer.experience_years ? `${lawyer.experience_years} years` : 'N/A'}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            statusColors[lawyer.status as keyof typeof statusColors] || 'bg-gray-100 text-gray-800'
-                          }`}
-                        >
-                          {lawyer.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => handleEdit(lawyer)}
-                            className="text-blue-600 hover:text-blue-900"
+            <div className="overflow-x-auto -mx-4 sm:mx-0">
+              <div className="inline-block min-w-full align-middle">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        ID
+                      </th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Name
+                      </th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Email
+                      </th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Practice Areas
+                      </th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Experience
+                      </th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {lawyers.map((lawyer) => (
+                      <tr key={lawyer.id} className="hover:bg-gray-50">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium text-gray-900">
+                          {lawyer.lawyer_id}
+                        </td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
+                          <div className="text-xs sm:text-sm font-medium text-gray-900">{lawyer.name}</div>
+                        </td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
+                          <div className="text-xs sm:text-sm text-gray-900">{lawyer.email}</div>
+                          {lawyer.phone && (
+                            <div className="text-xs sm:text-sm text-gray-500">{lawyer.phone}</div>
+                          )}
+                        </td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
+                          <div className="text-xs sm:text-sm text-gray-900">
+                            {lawyer.practice_areas.join(', ')}
+                          </div>
+                        </td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
+                          <div className="text-xs sm:text-sm text-gray-900">
+                            {lawyer.experience_years ? `${lawyer.experience_years} years` : 'N/A'}
+                          </div>
+                        </td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
+                          <span
+                            className={`px-1.5 sm:px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              statusColors[lawyer.status as keyof typeof statusColors] || 'bg-gray-100 text-gray-800'
+                            }`}
                           >
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => handleDelete(lawyer.id)}
-                            className="text-red-600 hover:text-red-900"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </td>
+                            {lawyer.status}
+                          </span>
+                        </td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium">
+                          <div className="flex flex-col sm:flex-row gap-1 sm:gap-2">
+                            <button
+                              onClick={() => handleEdit(lawyer)}
+                              className="text-blue-600 hover:text-blue-900"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleDelete(lawyer.id)}
+                              className="text-red-600 hover:text-red-900"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
                     </tr>
                   ))}
                 </tbody>

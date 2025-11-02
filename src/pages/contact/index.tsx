@@ -123,7 +123,7 @@ const ContactPage: React.FC = () => {
       </Head>
 
       {/* Hero Section */}
-      <section className="relative h-[50vh] bg-gray-900 text-white">
+      <section className="relative h-[35vh] sm:h-[45vh] md:h-[50vh] bg-gray-900 text-white">
         <div className="absolute inset-0">
           <img
             className="w-full h-full object-cover opacity-50"
@@ -138,8 +138,8 @@ const ContactPage: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="max-w-2xl"
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">Contact Us</h1>
-            <p className="text-xl md:text-2xl">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">Contact Us</h1>
+            <p className="text-lg sm:text-xl md:text-2xl">
               Get in touch with our team of legal professionals
             </p>
           </motion.div>
@@ -147,39 +147,39 @@ const ContactPage: React.FC = () => {
       </section>
 
       {/* Contact Form */}
-      <section className="py-16 bg-white">
+      <section className="py-8 sm:py-12 lg:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-3xl font-bold mb-8">Send Us a Message</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">Send Us a Message</h2>
 
               {submitStatus === 'success' && (
-                <div className="mb-6 p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg">
-                  <div className="flex items-start gap-3">
-                    <svg className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg">
+                  <div className="flex items-start gap-2 sm:gap-3">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
-                      <p className="font-semibold">Message Sent Successfully!</p>
-                      <p className="text-sm mt-1">Thank you for your message. We've received it and sent a confirmation email to your address. We will get back to you within 24-48 hours.</p>
+                      <p className="text-sm sm:text-base font-semibold">Message Sent Successfully!</p>
+                      <p className="text-xs sm:text-sm mt-1">Thank you for your message. We've received it and sent a confirmation email to your address. We will get back to you within 24-48 hours.</p>
                     </div>
                   </div>
                 </div>
               )}
 
               {submitStatus === 'error' && (
-                <div className="mb-6 p-4 bg-red-50 text-red-700 rounded-md">
+                <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 text-red-700 rounded-md text-sm sm:text-base">
                   {errorMessage}
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="name" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                     Name
                   </label>
                   <input
@@ -188,13 +188,13 @@ const ContactPage: React.FC = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                    className="mt-1 block w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
                     required
                     disabled={isSubmitting}
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="email" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                     Email
                   </label>
                   <input
@@ -203,13 +203,13 @@ const ContactPage: React.FC = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                    className="mt-1 block w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
                     required
                     disabled={isSubmitting}
                   />
                 </div>
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="phone" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                     Phone
                   </label>
                   <input
@@ -218,12 +218,12 @@ const ContactPage: React.FC = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                    className="mt-1 block w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
                     disabled={isSubmitting}
                   />
                 </div>
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="subject" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                     Subject
                   </label>
                   <select
@@ -231,7 +231,7 @@ const ContactPage: React.FC = () => {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                    className="mt-1 block w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
                     required
                     disabled={isSubmitting}
                   >
@@ -244,7 +244,7 @@ const ContactPage: React.FC = () => {
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="message" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                     Message
                   </label>
                   <textarea
@@ -253,14 +253,14 @@ const ContactPage: React.FC = () => {
                     value={formData.message}
                     onChange={handleChange}
                     rows={4}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                    className="mt-1 block w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
                     required
                     disabled={isSubmitting}
                   />
                 </div>
                 <button
                   type="submit"
-                  className={`w-full px-6 py-3 rounded-md text-white transition-colors ${
+                  className={`w-full px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base rounded-md text-white transition-colors ${
                     isSubmitting
                       ? 'bg-gray-400 cursor-not-allowed'
                       : 'bg-primary-600 hover:bg-primary-700'
@@ -276,21 +276,22 @@ const ContactPage: React.FC = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
+              className="mt-8 lg:mt-0"
             >
-              <h2 className="text-3xl font-bold mb-8">Office Locations</h2>
-              <div className="space-y-8">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">Office Locations</h2>
+              <div className="space-y-6 sm:space-y-8">
                 {officeLocations.map((office, index) => (
                   <motion.div
                     key={office.city}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.2 }}
-                    className="bg-gray-50 p-6 rounded-lg"
+                    className="bg-gray-50 p-4 sm:p-6 rounded-lg"
                   >
-                    <h3 className="text-xl font-bold mb-2">{office.city}</h3>
-                    <p className="text-gray-600 mb-2">{office.address}</p>
-                    <p className="text-gray-600 mb-2">Phone: {office.phone}</p>
-                    <p className="text-gray-600">Email: {office.email}</p>
+                    <h3 className="text-lg sm:text-xl font-bold mb-2">{office.city}</h3>
+                    <p className="text-sm sm:text-base text-gray-600 mb-2">{office.address}</p>
+                    <p className="text-sm sm:text-base text-gray-600 mb-2">Phone: {office.phone}</p>
+                    <p className="text-sm sm:text-base text-gray-600">Email: {office.email}</p>
                   </motion.div>
                 ))}
               </div>
@@ -300,16 +301,16 @@ const ContactPage: React.FC = () => {
       </section>
 
       {/* Emergency Contact */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-8 sm:py-12 lg:py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">Emergency Contact</h2>
-          <p className="text-xl text-gray-600 mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Emergency Contact</h2>
+          <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8">
             For urgent legal matters, please contact our 24/7 emergency hotline
           </p>
           <div className="max-w-md mx-auto">
             <a
               href="tel:+1-800-123-4567"
-              className="inline-block bg-red-600 text-white px-8 py-3 rounded-md hover:bg-red-700 transition-colors"
+              className="inline-block bg-red-600 text-white px-6 sm:px-8 py-2 sm:py-3 text-sm sm:text-base rounded-md hover:bg-red-700 transition-colors"
             >
               Emergency Hotline: 1-800-123-4567
             </a>

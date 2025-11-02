@@ -103,7 +103,7 @@ const NewsList: React.FC = () => {
   };
 
   return (
-    <section className="space-y-8">
+    <section className="space-y-4 sm:space-y-6 lg:space-y-8">
       <AnimatePresence>
         {allNewsItems.slice(0, displayCount).map((item, index) => (
           <motion.article
@@ -113,8 +113,8 @@ const NewsList: React.FC = () => {
             transition={{ delay: index * 0.1 }}
             className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden"
           >
-            <div className="flex flex-col md:flex-row">
-              <div className="md:w-1/3 relative h-48 md:h-auto">
+            <div className="flex flex-col sm:flex-row">
+              <div className="sm:w-1/3 relative h-48 sm:h-auto">
                 <Image
                   src={item.image}
                   alt={item.title}
@@ -122,30 +122,30 @@ const NewsList: React.FC = () => {
                   style={{ objectFit: 'cover' }}
                 />
               </div>
-              <div className="flex-1 p-6 md:p-8">
-                <div className="flex items-center space-x-4 mb-3">
-                  <span className="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">
+              <div className="flex-1 p-4 sm:p-6 lg:p-8">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 mb-2 sm:mb-3 gap-2 sm:gap-0">
+                  <span className="bg-blue-100 text-blue-800 text-xs sm:text-sm px-2 sm:px-3 py-1 rounded-full w-fit">
                     {item.category}
                   </span>
-                  <span className="text-sm text-gray-500">{item.date}</span>
+                  <span className="text-xs sm:text-sm text-gray-500">{item.date}</span>
                 </div>
-                <h3 className="text-xl font-semibold mb-3 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 group-hover:text-blue-600 transition-colors">
                   <Link href={`/news/${item.id}`}>
                     {item.title}
                   </Link>
                 </h3>
-                <p className="text-gray-600 mb-4">
+                <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
                   {item.excerpt}
                 </p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4 text-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
+                  <div className="flex items-center space-x-2 sm:space-x-4 text-xs sm:text-sm">
                     <span className="text-gray-600">{item.author}</span>
                     <span className="text-gray-500">•</span>
                     <span className="text-gray-500">{item.readTime}</span>
                   </div>
                   <Link 
                     href={`/news/${item.id}`}
-                    className="text-blue-600 hover:text-blue-700 transition-colors flex items-center"
+                    className="text-sm sm:text-base text-blue-600 hover:text-blue-700 transition-colors flex items-center"
                   >
                     Read more
                     <FiArrowRight className="ml-2" />

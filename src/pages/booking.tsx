@@ -334,7 +334,7 @@ const BookingPage: React.FC = () => {
       </Head>
 
       {/* Hero Section */}
-      <section className="relative h-[40vh] bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 text-white">
+      <section className="relative h-[30vh] sm:h-[35vh] md:h-[40vh] bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 text-white">
         <div className="absolute inset-0 bg-black/30"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
           <motion.div
@@ -343,8 +343,8 @@ const BookingPage: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="max-w-3xl"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Book an Appointment</h1>
-            <p className="text-xl text-blue-100">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">Book an Appointment</h1>
+            <p className="text-base sm:text-lg md:text-xl text-blue-100">
               Schedule a consultation with our legal experts. We're here to help with your legal needs.
             </p>
           </motion.div>
@@ -352,10 +352,10 @@ const BookingPage: React.FC = () => {
       </section>
 
       {/* Booking Form */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-8 sm:py-12 lg:py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-xl shadow-lg p-8 md:p-12">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-gray-900">Appointment Details</h2>
+          <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 lg:p-12">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-8 text-gray-900">Appointment Details</h2>
 
             {submitStatus === 'success' && (
               <motion.div
@@ -387,11 +387,11 @@ const BookingPage: React.FC = () => {
               </motion.div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
               {/* Personal Information */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="name" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     Full Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -401,13 +401,13 @@ const BookingPage: React.FC = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="John Doe"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="email" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     Email Address <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -417,14 +417,14 @@ const BookingPage: React.FC = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="john@example.com"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="phone" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                   Phone Number
                 </label>
                 <input
@@ -433,15 +433,15 @@ const BookingPage: React.FC = () => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="+1 (555) 123-4567"
                 />
               </div>
 
               {/* Appointment Details */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 <div>
-                  <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="date" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     Preferred Date <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -452,12 +452,12 @@ const BookingPage: React.FC = () => {
                     onChange={handleChange}
                     min={today}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="time" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="time" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     Preferred Time <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -467,12 +467,12 @@ const BookingPage: React.FC = () => {
                     value={formData.time}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
-                <div>
-                  <label htmlFor="practiceArea" className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="sm:col-span-2 lg:col-span-1">
+                  <label htmlFor="practiceArea" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     Practice Area <span className="text-red-500">*</span>
                   </label>
                   <select
@@ -481,7 +481,7 @@ const BookingPage: React.FC = () => {
                     value={formData.practiceArea}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
                     <option value="">Select an area</option>
                     {practiceAreas.map((area) => (
@@ -495,26 +495,26 @@ const BookingPage: React.FC = () => {
 
               {/* Lawyer Selection */}
               <div>
-                <label htmlFor="lawyerId" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="lawyerId" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                   Select Lawyer <span className="text-gray-500 text-xs">(Optional)</span>
                 </label>
                 {loadingLawyers ? (
-                  <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 flex items-center gap-2">
-                    <svg className="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <div className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg bg-gray-50 flex items-center gap-2">
+                    <svg className="animate-spin h-4 w-4 sm:h-5 sm:w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    <span className="text-gray-600">Loading lawyers...</span>
+                    <span className="text-xs sm:text-sm text-gray-600">Loading lawyers...</span>
                   </div>
                 ) : errorMessage && lawyers.length === 0 ? (
-                  <div className="w-full px-4 py-3 border border-red-300 rounded-lg bg-red-50">
-                    <p className="text-sm text-red-700">
+                  <div className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-red-300 rounded-lg bg-red-50">
+                    <p className="text-xs sm:text-sm text-red-700">
                       {errorMessage || 'No lawyers available at the moment. You can still proceed with the booking.'}
                     </p>
                   </div>
                 ) : lawyers.length === 0 ? (
-                  <div className="w-full px-4 py-3 border border-orange-300 rounded-lg bg-orange-50">
-                    <p className="text-sm text-orange-700">
+                  <div className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-orange-300 rounded-lg bg-orange-50">
+                    <p className="text-xs sm:text-sm text-orange-700">
                       No lawyers available at the moment. You can still proceed with the booking.
                     </p>
                   </div>
@@ -524,7 +524,7 @@ const BookingPage: React.FC = () => {
                     name="lawyerId"
                     value={formData.lawyerId}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
                     <option value="">Select a lawyer</option>
                     {lawyers.map((lawyer) => {
@@ -582,7 +582,7 @@ const BookingPage: React.FC = () => {
 
               {/* Message */}
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="message" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                   Additional Information
                 </label>
                 <textarea
@@ -591,39 +591,39 @@ const BookingPage: React.FC = () => {
                   value={formData.message}
                   onChange={handleChange}
                   rows={4}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Please provide any additional details about your legal matter..."
                 />
               </div>
 
               {/* Document Upload Section */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                   Upload Documents (Optional)
                 </label>
-                <p className="text-sm text-gray-500 mb-4">
+                <p className="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4">
                   You can upload relevant documents such as contracts, agreements, or other legal documents.
                   Supported formats: PDF, DOC, DOCX, PNG, JPG (Max 10MB per file)
                 </p>
 
                 <div
                   {...getRootProps()}
-                  className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+                  className={`border-2 border-dashed rounded-lg p-4 sm:p-6 lg:p-8 text-center cursor-pointer transition-colors ${
                     isDragActive
                       ? 'border-blue-500 bg-blue-50'
                       : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
                   }`}
                 >
                   <input {...getInputProps()} />
-                  <DocumentIcon className="w-12 h-12 mx-auto mb-4 text-gray-400" />
+                  <DocumentIcon className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mx-auto mb-3 sm:mb-4 text-gray-400" />
                   {isDragActive ? (
-                    <p className="text-blue-600 font-medium">Drop the files here...</p>
+                    <p className="text-sm sm:text-base text-blue-600 font-medium">Drop the files here...</p>
                   ) : (
                     <>
-                      <p className="text-gray-600 mb-2">
+                      <p className="text-xs sm:text-sm lg:text-base text-gray-600 mb-1 sm:mb-2">
                         Drag and drop files here, or click to select files
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-xs sm:text-sm text-gray-500">
                         PDF, DOC, DOCX, PNG, JPG (Max 10MB)
                       </p>
                     </>
@@ -710,33 +710,33 @@ const BookingPage: React.FC = () => {
       </section>
 
       {/* Information Section */}
-      <section className="py-12 bg-white">
+      <section className="py-8 sm:py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CalendarIcon className="w-8 h-8 text-blue-600" />
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <CalendarIcon className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Flexible Scheduling</h3>
-              <p className="text-gray-600 text-sm">
+              <h3 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2">Flexible Scheduling</h3>
+              <p className="text-xs sm:text-sm text-gray-600">
                 Choose a date and time that works best for you
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <DocumentIcon className="w-8 h-8 text-blue-600" />
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <DocumentIcon className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Document Review</h3>
-              <p className="text-gray-600 text-sm">
+              <h3 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2">Document Review</h3>
+              <p className="text-xs sm:text-sm text-gray-600">
                 Upload relevant documents for our team to review
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircleIcon className="w-8 h-8 text-blue-600" />
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <CheckCircleIcon className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Quick Confirmation</h3>
-              <p className="text-gray-600 text-sm">
+              <h3 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2">Quick Confirmation</h3>
+              <p className="text-xs sm:text-sm text-gray-600">
                 Receive instant email confirmation of your booking
               </p>
             </div>

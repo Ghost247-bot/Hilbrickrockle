@@ -171,18 +171,18 @@ const AdminAppointments = () => {
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
+      <div className="space-y-4 sm:space-y-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Appointments</h1>
-            <p className="mt-2 text-gray-600">Manage all appointment bookings</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Appointments</h1>
+            <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">Manage all appointment bookings</p>
           </div>
-          <div className="text-sm text-gray-500">Total: {total}</div>
+          <div className="text-xs sm:text-sm text-gray-500">Total: {total}</div>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-lg shadow-sm border p-4">
-          <div className="flex gap-2">
+        <div className="bg-white rounded-lg shadow-sm border p-3 sm:p-4">
+          <div className="flex flex-wrap gap-2">
             {['all', 'pending', 'confirmed', 'cancelled', 'completed'].map((status) => (
               <button
                 key={status}
@@ -216,66 +216,67 @@ const AdminAppointments = () => {
           </div>
         ) : (
           <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Client
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Date & Time
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Practice Area
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Lawyer
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {appointments.map((appointment) => (
-                    <tr key={appointment.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">{appointment.name}</div>
-                          <div className="text-sm text-gray-500">{appointment.email}</div>
-                          {appointment.phone && (
-                            <div className="text-sm text-gray-500">{appointment.phone}</div>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{formatDate(appointment.date)}</div>
-                        <div className="text-sm text-gray-500">{appointment.time}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{appointment.practice_area}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {appointment.lawyers?.name || appointment.lawyer_id || 'Not assigned'}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            statusColors[appointment.status as keyof typeof statusColors] || 'bg-gray-100 text-gray-800'
-                          }`}
-                        >
-                          {appointment.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex flex-col gap-2">
-                          <div className="flex gap-2">
+            <div className="overflow-x-auto -mx-4 sm:mx-0">
+              <div className="inline-block min-w-full align-middle">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Client
+                      </th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Date & Time
+                      </th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Practice Area
+                      </th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Lawyer
+                      </th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {appointments.map((appointment) => (
+                      <tr key={appointment.id} className="hover:bg-gray-50">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
+                          <div>
+                            <div className="text-xs sm:text-sm font-medium text-gray-900">{appointment.name}</div>
+                            <div className="text-xs sm:text-sm text-gray-500">{appointment.email}</div>
+                            {appointment.phone && (
+                              <div className="text-xs sm:text-sm text-gray-500">{appointment.phone}</div>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
+                          <div className="text-xs sm:text-sm text-gray-900">{formatDate(appointment.date)}</div>
+                          <div className="text-xs sm:text-sm text-gray-500">{appointment.time}</div>
+                        </td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
+                          <div className="text-xs sm:text-sm text-gray-900">{appointment.practice_area}</div>
+                        </td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
+                          <div className="text-xs sm:text-sm text-gray-900">
+                            {appointment.lawyers?.name || appointment.lawyer_id || 'Not assigned'}
+                          </div>
+                        </td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4">
+                          <span
+                            className={`px-1.5 sm:px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              statusColors[appointment.status as keyof typeof statusColors] || 'bg-gray-100 text-gray-800'
+                            }`}
+                          >
+                            {appointment.status}
+                          </span>
+                        </td>
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium">
+                          <div className="flex flex-col gap-1 sm:gap-2">
+                            <div className="flex flex-wrap gap-1 sm:gap-2">
                             {appointment.status !== 'confirmed' && (
                               <button
                                 onClick={() => updateStatus(appointment.id, 'confirmed')}
@@ -321,27 +322,27 @@ const AdminAppointments = () => {
         {/* Cancel Confirmation Modal */}
         {showCancelConfirm && (
           <div 
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
             onClick={() => setShowCancelConfirm(null)}
           >
             <div 
-              className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full mx-4"
+              className="bg-white rounded-lg shadow-xl p-4 sm:p-6 max-w-md w-full"
               onClick={(e) => e.stopPropagation()}
             >
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Cancel Appointment?</h3>
-              <p className="text-gray-600 mb-6">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Cancel Appointment?</h3>
+              <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
                 Are you sure you want to cancel this appointment? This action cannot be undone.
               </p>
-              <div className="flex gap-3 justify-end">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-end">
                 <button
                   onClick={() => setShowCancelConfirm(null)}
-                  className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                  className="px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
                 >
                   No, Keep It
                 </button>
                 <button
                   onClick={() => handleCancelConfirm(showCancelConfirm)}
-                  className="px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
+                  className="px-3 sm:px-4 py-2 text-sm sm:text-base text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
                 >
                   Yes, Cancel
                 </button>

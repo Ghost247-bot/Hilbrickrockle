@@ -7,17 +7,17 @@ import AboutLeadershipSlider from '../../components/AboutLeadershipSlider';
 const AboutPage: React.FC = () => {
   const timeline = [
     {
-      year: '1934',
+      year: '1998',
       title: 'Firm Founded',
-      description: 'HilbrickRockle was established in Los Angeles, California.',
+      description: 'HilbrickRockle was established in Lincoln, Nebraska',
     },
     {
-      year: '1960',
+      year: '1999',
       title: 'First International Office',
       description: 'Opened our first international office in London.',
     },
     {
-      year: '1990',
+      year: '2002',
       title: 'Global Expansion',
       description: 'Expanded operations across Europe and Asia.',
     },
@@ -59,7 +59,7 @@ const AboutPage: React.FC = () => {
       </Head>
 
       {/* Hero Section */}
-      <section className="relative h-[60vh] bg-gray-900 text-white">
+      <section className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] bg-gray-900 text-white">
         <div className="absolute inset-0">
           <img
             className="w-full h-full object-cover opacity-50"
@@ -74,8 +74,8 @@ const AboutPage: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="max-w-2xl"
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">About Us</h1>
-            <p className="text-xl md:text-2xl">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">About Us</h1>
+            <p className="text-lg sm:text-xl md:text-2xl">
               A global law firm with a legacy of excellence and innovation
             </p>
           </motion.div>
@@ -83,24 +83,24 @@ const AboutPage: React.FC = () => {
       </section>
 
       {/* Firm History */}
-      <section className="py-16 bg-white">
+      <section className="py-8 sm:py-12 lg:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-12">Our History</h2>
-          <div className="space-y-8">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 lg:mb-12">Our History</h2>
+          <div className="space-y-6 sm:space-y-8">
             {timeline.map((item, index) => (
               <motion.div
                 key={item.year}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.2 }}
-                className="flex items-start space-x-4"
+                className="flex flex-col sm:flex-row items-start space-y-2 sm:space-y-0 sm:space-x-4"
               >
-                <div className="flex-shrink-0 w-24 text-2xl font-bold text-primary-600">
+                <div className="flex-shrink-0 w-full sm:w-24 text-xl sm:text-2xl font-bold text-primary-600">
                   {item.year}
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                  <p className="text-gray-600">{item.description}</p>
+                <div className="flex-1">
+                  <h3 className="text-lg sm:text-xl font-semibold mb-1 sm:mb-2">{item.title}</h3>
+                  <p className="text-sm sm:text-base text-gray-600">{item.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -109,21 +109,21 @@ const AboutPage: React.FC = () => {
       </section>
 
       {/* Core Values */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-8 sm:py-12 lg:py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-12">Our Core Values</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 lg:mb-12">Our Core Values</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             {values.map((value, index) => (
               <motion.div
                 key={value.title}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.2 }}
-                className="bg-white p-6 rounded-lg shadow-sm"
+                className="bg-white p-4 sm:p-6 rounded-lg shadow-sm"
               >
-                <div className="text-4xl mb-4">{value.icon}</div>
-                <h3 className="text-xl font-semibold mb-2">{value.title}</h3>
-                <p className="text-gray-600">{value.description}</p>
+                <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">{value.icon}</div>
+                <h3 className="text-lg sm:text-xl font-semibold mb-1 sm:mb-2">{value.title}</h3>
+                <p className="text-sm sm:text-base text-gray-600">{value.description}</p>
               </motion.div>
             ))}
           </div>

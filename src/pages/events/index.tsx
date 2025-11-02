@@ -64,7 +64,7 @@ const EventsPage: React.FC = () => {
       </Head>
 
       {/* Hero Section */}
-      <section className="relative h-[50vh] bg-gray-900 text-white">
+      <section className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] bg-gray-900 text-white">
         <div className="absolute inset-0">
           <img
             className="w-full h-full object-cover opacity-50"
@@ -79,8 +79,8 @@ const EventsPage: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="max-w-2xl"
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">Events</h1>
-            <p className="text-xl md:text-2xl">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">Events</h1>
+            <p className="text-lg sm:text-xl md:text-2xl">
               Join us for conferences, webinars, and networking opportunities
             </p>
           </motion.div>
@@ -88,10 +88,10 @@ const EventsPage: React.FC = () => {
       </section>
 
       {/* Upcoming Events */}
-      <section className="py-16 bg-white">
+      <section className="py-8 sm:py-12 lg:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-12">Upcoming Events</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 lg:mb-12">Upcoming Events</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {upcomingEvents.map((event, index) => (
               <motion.div
                 key={event.title}
@@ -100,29 +100,29 @@ const EventsPage: React.FC = () => {
                 transition={{ duration: 0.5, delay: index * 0.2 }}
                 className="bg-white rounded-lg shadow-lg overflow-hidden"
               >
-                <div className="relative h-48">
+                <div className="relative h-40 sm:h-48">
                   <Image
                     src={event.image}
                     alt={event.title}
                     fill
                     style={{ objectFit: 'cover' }}
                   />
-                  <div className="absolute top-4 right-4">
-                    <span className="bg-primary-600 text-white px-3 py-1 rounded-full text-sm">
+                  <div className="absolute top-2 sm:top-4 right-2 sm:right-4">
+                    <span className="bg-primary-600 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
                       {event.category}
                     </span>
                   </div>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                  <div className="flex items-center text-gray-600 mb-4">
-                    <span className="mr-4">{event.date}</span>
+                <div className="p-4 sm:p-6">
+                  <h3 className="text-lg sm:text-xl font-bold mb-2">{event.title}</h3>
+                  <div className="flex flex-col sm:flex-row sm:items-center text-sm sm:text-base text-gray-600 mb-3 sm:mb-4 gap-1 sm:gap-0">
+                    <span className="sm:mr-4">{event.date}</span>
                     <span>{event.location}</span>
                   </div>
-                  <p className="text-gray-600 mb-6">{event.description}</p>
+                  <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">{event.description}</p>
                   <Link
                     href={event.link}
-                    className="inline-block bg-primary-600 text-white px-6 py-2 rounded-md hover:bg-primary-700 transition-colors"
+                    className="inline-block bg-primary-600 text-white px-4 sm:px-6 py-2 text-sm sm:text-base rounded-md hover:bg-primary-700 transition-colors"
                   >
                     Register Now
                   </Link>
@@ -134,10 +134,10 @@ const EventsPage: React.FC = () => {
       </section>
 
       {/* Past Events */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-8 sm:py-12 lg:py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-12">Past Events</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 lg:mb-12">Past Events</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
             {pastEvents.map((event, index) => (
               <motion.div
                 key={event.title}
@@ -146,29 +146,29 @@ const EventsPage: React.FC = () => {
                 transition={{ duration: 0.5, delay: index * 0.2 }}
                 className="bg-white rounded-lg shadow-md overflow-hidden"
               >
-                <div className="relative h-48">
+                <div className="relative h-40 sm:h-48">
                   <Image
                     src={event.image}
                     alt={event.title}
                     fill
                     style={{ objectFit: 'cover' }}
                   />
-                  <div className="absolute top-4 right-4">
-                    <span className="bg-gray-600 text-white px-3 py-1 rounded-full text-sm">
+                  <div className="absolute top-2 sm:top-4 right-2 sm:right-4">
+                    <span className="bg-gray-600 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
                       {event.category}
                     </span>
                   </div>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                  <div className="flex items-center text-gray-600 mb-4">
-                    <span className="mr-4">{event.date}</span>
+                <div className="p-4 sm:p-6">
+                  <h3 className="text-lg sm:text-xl font-bold mb-2">{event.title}</h3>
+                  <div className="flex flex-col sm:flex-row sm:items-center text-sm sm:text-base text-gray-600 mb-3 sm:mb-4 gap-1 sm:gap-0">
+                    <span className="sm:mr-4">{event.date}</span>
                     <span>{event.location}</span>
                   </div>
-                  <p className="text-gray-600 mb-6">{event.description}</p>
+                  <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">{event.description}</p>
                   <Link
                     href={event.link}
-                    className="text-primary-600 hover:text-primary-700"
+                    className="text-sm sm:text-base text-primary-600 hover:text-primary-700"
                   >
                     View Recap →
                   </Link>
@@ -180,14 +180,14 @@ const EventsPage: React.FC = () => {
       </section>
 
       {/* Event Calendar */}
-      <section className="py-16 bg-white">
+      <section className="py-8 sm:py-12 lg:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">Event Calendar</h2>
-          <p className="text-xl text-gray-600 mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Event Calendar</h2>
+          <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8">
             Stay updated with our upcoming events and never miss an opportunity to connect
           </p>
           <div className="max-w-md mx-auto">
-            <button className="bg-primary-600 text-white px-8 py-3 rounded-md hover:bg-primary-700 transition-colors">
+            <button className="bg-primary-600 text-white px-6 sm:px-8 py-2 sm:py-3 text-sm sm:text-base rounded-md hover:bg-primary-700 transition-colors">
               Add to Calendar
             </button>
           </div>

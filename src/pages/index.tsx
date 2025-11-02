@@ -106,9 +106,9 @@ const HomePage: React.FC = () => {
       <HeroSlideshow />
 
       {/* Featured News Section */}
-      <section className="py-16 bg-white">
+      <section className="py-8 sm:py-12 lg:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {featuredNews.map((item, index) => (
               <motion.div
                 key={index}
@@ -126,14 +126,14 @@ const HomePage: React.FC = () => {
                     className="transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
-                <div className="p-6">
-                  <span className="text-sm font-medium text-blue-600">
+                <div className="p-4 sm:p-6">
+                  <span className="text-xs sm:text-sm font-medium text-blue-600">
                     {item.category}
                   </span>
-                  <h3 className="mt-2 text-xl font-semibold text-gray-900">
+                  <h3 className="mt-2 text-lg sm:text-xl font-semibold text-gray-900">
                     {item.title}
                   </h3>
-                  <p className="mt-2 text-gray-600">
+                  <p className="mt-2 text-sm sm:text-base text-gray-600">
                     {item.description}
                   </p>
                   <Link
@@ -151,10 +151,10 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Recent Deals Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-8 sm:py-12 lg:py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12">Recent Deals</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8 lg:mb-12">Recent Deals</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {recentDeals.map((deal, index) => (
               <motion.div
                 key={index}
@@ -171,14 +171,14 @@ const HomePage: React.FC = () => {
                     style={{ objectFit: 'cover' }}
                   />
                 </div>
-                <div className="p-6">
-                  <span className="text-sm font-medium text-blue-600">
+                <div className="p-4 sm:p-6">
+                  <span className="text-xs sm:text-sm font-medium text-blue-600">
                     {deal.category}
                   </span>
-                  <h3 className="mt-2 text-xl font-semibold text-gray-900">
+                  <h3 className="mt-2 text-lg sm:text-xl font-semibold text-gray-900">
                     {deal.title}
                   </h3>
-                  <p className="mt-2 text-gray-600">
+                  <p className="mt-2 text-sm sm:text-base text-gray-600">
                     {deal.description}
                   </p>
                 </div>
@@ -189,21 +189,21 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Achievements Section */}
-      <section className="py-16 bg-blue-900 text-white">
+      <section className="py-8 sm:py-12 lg:py-16 bg-blue-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-12 text-center">Recognition & Achievements</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 lg:mb-12 text-center">Recognition & Achievements</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {achievements.map((achievement, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.2 }}
-                className="text-center p-6 rounded-lg bg-white/10 backdrop-blur-sm"
+                className="text-center p-4 sm:p-6 rounded-lg bg-white/10 backdrop-blur-sm"
               >
-                <h3 className="text-xl font-semibold mb-3">{achievement.title}</h3>
-                <p className="text-gray-300 mb-4">{achievement.description}</p>
-                <span className="text-sm font-medium text-blue-300">{achievement.source}</span>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">{achievement.title}</h3>
+                <p className="text-sm sm:text-base text-gray-300 mb-3 sm:mb-4">{achievement.description}</p>
+                <span className="text-xs sm:text-sm font-medium text-blue-300">{achievement.source}</span>
               </motion.div>
             ))}
           </div>
@@ -211,22 +211,22 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-8 sm:py-12 lg:py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">What Others Say</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8 lg:mb-12 text-center">What Others Say</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
             {testimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.2 }}
-                className="bg-white p-8 rounded-lg shadow-lg"
+                className="bg-white p-6 sm:p-8 rounded-lg shadow-lg"
               >
-                <blockquote className="text-xl text-gray-900 italic mb-4">
+                <blockquote className="text-lg sm:text-xl text-gray-900 italic mb-3 sm:mb-4">
                   "{testimonial.quote}"
                 </blockquote>
-                <cite className="text-gray-600 not-italic">— {testimonial.source}</cite>
+                <cite className="text-sm sm:text-base text-gray-600 not-italic">— {testimonial.source}</cite>
               </motion.div>
             ))}
           </div>
@@ -234,12 +234,12 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-blue-600 to-blue-800">
+      <section className="py-8 sm:py-12 lg:py-16 bg-gradient-to-r from-blue-600 to-blue-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-8">Ready to Work Together?</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">Ready to Work Together?</h2>
           <Link
             href="/contact"
-            className="inline-flex items-center px-8 py-3 border-2 border-white text-lg font-medium rounded-md text-white hover:bg-white hover:text-blue-800 transition-all duration-200"
+            className="inline-flex items-center px-6 sm:px-8 py-2 sm:py-3 border-2 border-white text-base sm:text-lg font-medium rounded-md text-white hover:bg-white hover:text-blue-800 transition-all duration-200"
           >
             Get in Touch
           </Link>

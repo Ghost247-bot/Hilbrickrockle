@@ -147,10 +147,10 @@ const AdminDashboard = () => {
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="mt-2 text-gray-600">Overview of your law firm data</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Dashboard</h1>
+          <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">Overview of your law firm data</p>
         </div>
 
         {loading ? (
@@ -164,7 +164,7 @@ const AdminDashboard = () => {
         ) : (
           <>
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
               {statCards.map((card) => (
                 <Link
                   key={card.title}
@@ -172,14 +172,14 @@ const AdminDashboard = () => {
                   className="block"
                 >
                   <div
-                    className={`bg-white rounded-lg shadow-sm border-2 p-6 hover:shadow-md transition-shadow cursor-pointer ${colorClasses[card.color as keyof typeof colorClasses]}`}
+                    className={`bg-white rounded-lg shadow-sm border-2 p-4 sm:p-6 hover:shadow-md transition-shadow cursor-pointer ${colorClasses[card.color as keyof typeof colorClasses]}`}
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium opacity-80">{card.title}</p>
-                        <p className="text-3xl font-bold mt-2">{card.value}</p>
+                        <p className="text-xs sm:text-sm font-medium opacity-80">{card.title}</p>
+                        <p className="text-2xl sm:text-3xl font-bold mt-1 sm:mt-2">{card.value}</p>
                       </div>
-                      <div className="text-4xl">{card.icon}</div>
+                      <div className="text-3xl sm:text-4xl">{card.icon}</div>
                     </div>
                   </div>
                 </Link>
@@ -187,55 +187,55 @@ const AdminDashboard = () => {
             </div>
 
             {/* Additional Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-              <div className="bg-white rounded-lg shadow-sm border p-6">
-                <p className="text-sm font-medium text-gray-600">Recent Appointments (7 days)</p>
-                <p className="text-2xl font-bold text-gray-900 mt-2">{stats?.recentAppointments || 0}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-4 sm:mt-6">
+              <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Recent Appointments (7 days)</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-1 sm:mt-2">{stats?.recentAppointments || 0}</p>
               </div>
-              <div className="bg-white rounded-lg shadow-sm border p-6">
-                <p className="text-sm font-medium text-gray-600">Confirmed Appointments</p>
-                <p className="text-2xl font-bold text-gray-900 mt-2">{stats?.confirmedAppointments || 0}</p>
+              <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Confirmed Appointments</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-1 sm:mt-2">{stats?.confirmedAppointments || 0}</p>
               </div>
-              <div className="bg-white rounded-lg shadow-sm border p-6">
-                <p className="text-sm font-medium text-gray-600">Cancelled Appointments</p>
-                <p className="text-2xl font-bold text-gray-900 mt-2">{stats?.cancelledAppointments || 0}</p>
+              <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Cancelled Appointments</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-1 sm:mt-2">{stats?.cancelledAppointments || 0}</p>
               </div>
-              <div className="bg-white rounded-lg shadow-sm border p-6">
+              <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Appointments with Documents</p>
-                    <p className="text-2xl font-bold text-gray-900 mt-2">{stats?.appointmentsWithDocuments || 0}</p>
+                    <p className="text-xs sm:text-sm font-medium text-gray-600">Appointments with Documents</p>
+                    <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-1 sm:mt-2">{stats?.appointmentsWithDocuments || 0}</p>
                   </div>
-                  <div className="text-3xl">📎</div>
+                  <div className="text-2xl sm:text-3xl">📎</div>
                 </div>
               </div>
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-white rounded-lg shadow-sm border p-6 mt-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6 mt-4 sm:mt-6">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Quick Actions</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <Link
                   href="/admin/appointments?status=pending"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-center"
+                  className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-center"
                 >
                   Review Pending Appointments
                 </Link>
                 <Link
                   href="/admin/contact-messages?status=pending"
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-center"
+                  className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-center"
                 >
                   View Pending Messages
                 </Link>
                 <Link
                   href="/admin/lawyers"
-                  className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-center"
+                  className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-center"
                 >
                   Manage Lawyers
                 </Link>
                 <Link
                   href="/admin/document-links"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-center"
+                  className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-center"
                 >
                   Document Links
                 </Link>

@@ -20,14 +20,14 @@ const InsightsPage: React.FC = () => {
         <motion.section 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="relative bg-blue-900 text-white py-20"
+          className="relative bg-blue-900 text-white py-12 sm:py-16 lg:py-20"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.h1 
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="text-4xl md:text-5xl font-bold mb-6"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6"
             >
               Insights
             </motion.h1>
@@ -35,7 +35,7 @@ const InsightsPage: React.FC = () => {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="text-xl text-blue-100 max-w-2xl"
+              className="text-lg sm:text-xl text-blue-100 max-w-2xl"
             >
               Stay ahead with our latest legal perspectives, industry insights, and thought leadership.
             </motion.p>
@@ -43,7 +43,7 @@ const InsightsPage: React.FC = () => {
         </motion.section>
 
         {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
           <div className="grid gap-12">
             {/* Categories Navigation */}
             <InsightCategories />

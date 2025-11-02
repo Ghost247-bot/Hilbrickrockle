@@ -91,7 +91,7 @@ const PublicationsPage: React.FC = () => {
       </Head>
 
       {/* Hero Section */}
-      <section className="relative h-[50vh] bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white">
+      <section className="relative h-[35vh] sm:h-[45vh] md:h-[50vh] bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white">
         <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-10" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
           <motion.div
@@ -100,11 +100,11 @@ const PublicationsPage: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="max-w-2xl"
           >
-            <div className="flex items-center mb-6">
-              <FiBook className="mr-2 w-10 h-10" />
-              <h1 className="text-4xl md:text-5xl font-bold">Publications</h1>
+            <div className="flex items-center mb-4 sm:mb-6">
+              <FiBook className="mr-2 w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10" />
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">Publications</h1>
             </div>
-            <p className="text-xl md:text-2xl text-purple-100">
+            <p className="text-lg sm:text-xl md:text-2xl text-purple-100">
               Access our comprehensive library of legal insights, guides, and resources
             </p>
           </motion.div>
@@ -112,19 +112,19 @@ const PublicationsPage: React.FC = () => {
       </section>
 
       {/* Filter Section */}
-      <section className="py-8 bg-gray-50 border-b border-gray-200">
+      <section className="py-4 sm:py-6 lg:py-8 bg-gray-50 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between flex-wrap gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
             <div className="flex items-center">
               <FiFilter className="mr-2 text-gray-600" />
-              <span className="font-medium text-gray-700">Filter by Category:</span>
+              <span className="text-sm sm:text-base font-medium text-gray-700">Filter by Category:</span>
             </div>
             <div className="flex flex-wrap gap-2">
               {categories.map((category) => (
                 <button
                   key={category}
                   onClick={() => setFilter(category)}
-                  className={`px-4 py-2 rounded-full transition-colors ${
+                  className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-full transition-colors ${
                     filter === category
                       ? 'bg-indigo-600 text-white'
                       : 'bg-white text-gray-700 hover:bg-gray-100'
@@ -140,10 +140,10 @@ const PublicationsPage: React.FC = () => {
 
       {/* Featured Publications */}
       {filter === 'All' && (
-        <section className="py-16 bg-white">
+        <section className="py-8 sm:py-12 lg:py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold mb-12">Featured Publications</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 lg:mb-12">Featured Publications</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {publications.filter(p => p.featured).map((publication, index) => (
                 <motion.article
                   key={publication.title}
@@ -152,7 +152,7 @@ const PublicationsPage: React.FC = () => {
                   transition={{ delay: index * 0.1 }}
                   className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow group"
                 >
-                  <div className="relative h-48">
+                  <div className="relative h-40 sm:h-48">
                     <Image
                       src={publication.image}
                       alt={publication.title}
@@ -160,13 +160,13 @@ const PublicationsPage: React.FC = () => {
                       style={{ objectFit: 'cover' }}
                       className="group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium">
+                    <div className="absolute top-2 sm:top-4 right-2 sm:right-4 bg-white/90 backdrop-blur-sm px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
                       {publication.type}
                     </div>
                   </div>
-                  <div className="p-6">
-                    <div className="flex items-center text-gray-600 mb-2">
-                      <span className="bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full text-xs mr-2">
+                  <div className="p-4 sm:p-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center text-gray-600 mb-2 gap-1 sm:gap-0">
+                      <span className="bg-indigo-100 text-indigo-600 px-2 sm:px-3 py-1 rounded-full text-xs mr-0 sm:mr-2 w-fit">
                         {publication.category}
                       </span>
                       <span className="text-xs flex items-center">
@@ -174,11 +174,11 @@ const PublicationsPage: React.FC = () => {
                         {publication.date}
                       </span>
                     </div>
-                    <h3 className="text-xl font-bold mb-2 group-hover:text-indigo-600 transition-colors">
+                    <h3 className="text-lg sm:text-xl font-bold mb-2 group-hover:text-indigo-600 transition-colors">
                       {publication.title}
                     </h3>
-                    <p className="text-gray-600 text-sm mb-4">{publication.description}</p>
-                    <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
+                    <p className="text-sm text-gray-600 mb-3 sm:mb-4">{publication.description}</p>
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs text-gray-500 mb-3 sm:mb-4 gap-1 sm:gap-0">
                       <span className="flex items-center">
                         <FiFileText className="mr-1" />
                         {publication.pages} pages
@@ -188,7 +188,7 @@ const PublicationsPage: React.FC = () => {
                         {publication.downloads} downloads
                       </span>
                     </div>
-                    <button className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center">
+                    <button className="w-full bg-indigo-600 text-white py-2 text-sm sm:text-base rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center">
                       <FiDownload className="mr-2" />
                       Download
                     </button>
@@ -201,15 +201,15 @@ const PublicationsPage: React.FC = () => {
       )}
 
       {/* All Publications */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-8 sm:py-12 lg:py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 lg:mb-8 gap-2 sm:gap-0">
+            <h2 className="text-2xl sm:text-3xl font-bold">
               {filter === 'All' ? 'All Publications' : filter}
             </h2>
-            <span className="text-gray-600">{filteredPublications.length} publications</span>
+            <span className="text-sm sm:text-base text-gray-600">{filteredPublications.length} publications</span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {filteredPublications.map((publication, index) => (
               <motion.article
                 key={publication.title}
@@ -218,7 +218,7 @@ const PublicationsPage: React.FC = () => {
                 transition={{ delay: index * 0.05 }}
                 className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group"
               >
-                <div className="relative h-48">
+                <div className="relative h-40 sm:h-48">
                   <Image
                     src={publication.image}
                     alt={publication.title}
@@ -227,9 +227,9 @@ const PublicationsPage: React.FC = () => {
                     className="group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
-                <div className="p-6">
-                  <div className="flex items-center text-gray-600 mb-2">
-                    <span className="bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full text-xs mr-2">
+                <div className="p-4 sm:p-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center text-gray-600 mb-2 gap-1 sm:gap-0">
+                    <span className="bg-indigo-100 text-indigo-600 px-2 sm:px-3 py-1 rounded-full text-xs mr-0 sm:mr-2 w-fit">
                       {publication.category}
                     </span>
                     <span className="text-xs flex items-center">
@@ -237,11 +237,11 @@ const PublicationsPage: React.FC = () => {
                       {publication.date}
                     </span>
                   </div>
-                  <h3 className="text-lg font-bold mb-2 group-hover:text-indigo-600 transition-colors">
+                  <h3 className="text-base sm:text-lg font-bold mb-2 group-hover:text-indigo-600 transition-colors">
                     {publication.title}
                   </h3>
-                  <p className="text-gray-600 text-sm mb-4">{publication.description}</p>
-                  <button className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center">
+                  <p className="text-sm text-gray-600 mb-3 sm:mb-4">{publication.description}</p>
+                  <button className="w-full bg-indigo-600 text-white py-2 text-sm sm:text-base rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center">
                     <FiDownload className="mr-2" />
                     Download
                   </button>
@@ -253,20 +253,20 @@ const PublicationsPage: React.FC = () => {
       </section>
 
       {/* Newsletter Signup */}
-      <section className="py-16 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white">
+      <section className="py-8 sm:py-12 lg:py-16 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <FiBarChart className="w-16 h-16 mx-auto mb-6" />
-          <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
-          <p className="text-xl text-purple-100 mb-8">
+          <FiBarChart className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-6" />
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Stay Updated</h2>
+          <p className="text-lg sm:text-xl text-purple-100 mb-6 sm:mb-8">
             Subscribe to our newsletter to receive the latest publications and legal insights
           </p>
-          <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+          <form className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-md mx-auto">
             <input
               type="email"
               placeholder="Your email address"
-              className="flex-1 px-4 py-3 rounded-lg text-gray-900"
+              className="flex-1 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg text-gray-900"
             />
-            <button className="bg-white text-purple-900 px-8 py-3 rounded-lg hover:bg-gray-100 transition-colors font-medium">
+            <button className="bg-white text-purple-900 px-6 sm:px-8 py-2 sm:py-3 text-sm sm:text-base rounded-lg hover:bg-gray-100 transition-colors font-medium">
               Subscribe
             </button>
           </form>

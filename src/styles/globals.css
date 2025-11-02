@@ -5,6 +5,22 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    zoom: 0.9; /* Zoom out by 10% (90% scale) - works in Chrome, Edge, Safari, and modern Firefox */
+  }
+
+  /* Firefox and older browser fallback */
+  @supports not (zoom: 0.9) {
+    html {
+      transform: scale(0.9);
+      transform-origin: 0 0;
+      width: 111.11%;
+      height: 111.11%;
+    }
+    
+    body {
+      width: 100%;
+      overflow-x: hidden;
+    }
   }
 
   body {
