@@ -300,6 +300,7 @@ const AdminAppointments = () => {
                                 View Note
                               </button>
                             )}
+                            </div>
                           </div>
                           {appointment.documents && appointment.documents.length > 0 && (
                             <div className="mt-2">
@@ -308,8 +309,8 @@ const AdminAppointments = () => {
                               </span>
                             </div>
                           )}
-                        </div>
-                      </td>
+                          </div>
+                        </td>
                     </tr>
                   ))}
                 </tbody>

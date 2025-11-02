@@ -9,6 +9,7 @@
     "lint": "next lint",
     "test": "jest",
     "vercel-build": "npm run build",
+    "check-netlify": "node scripts/check-netlify-ready.js",
     "backend": "cd backend && npm run dev",
     "backend-new": "cd backend-new && npm run dev",
     "verify-db": "ts-node scripts/verify-database.ts",
