@@ -241,27 +241,52 @@ const BookingPage: React.FC = () => {
         body: formDataToSend,
       });
 
-      // Check if response is ok before parsing
+      // Clone response to read as both text and potentially JSON
+      const responseClone = response.clone();
       const contentType = response.headers.get('content-type');
-      let data;
+      let data: any;
+      let errorOccurred = false;
+      let errorMessage = '';
       
-      if (contentType && contentType.includes('application/json')) {
+      // First, try to read as text to check if it's HTML
+      const textContent = await responseClone.text();
+      
+      // Check if it's an HTML error page
+      if (textContent.trim().startsWith('<!DOCTYPE') || textContent.trim().startsWith('<html')) {
+        // Extract error message from HTML if possible
+        const titleMatch = textContent.match(/<title>([^<]+)<\/title>/i);
+        
+        if (titleMatch) {
+          errorMessage = `Server error: ${titleMatch[1]}. Please try again or contact support.`;
+        } else {
+          errorMessage = 'Internal server error. Please try again or contact support.';
+        }
+        
+        errorOccurred = true;
+      } else if (contentType && contentType.includes('application/json')) {
+        // Try to parse as JSON if content-type says it's JSON
         try {
-          data = await response.json();
+          data = JSON.parse(textContent);
         } catch (jsonError) {
-          throw new Error('Invalid response from server');
+          // If parsing fails, treat as error
+          errorOccurred = true;
+          errorMessage = 'Invalid JSON response from server. Please try again.';
         }
       } else {
-        // If not JSON, read as text to get error message
-        const text = await response.text();
-        throw new Error(text || 'Failed to submit booking');
+        // Not JSON and not HTML - treat as plain text error
+        errorOccurred = true;
+        errorMessage = textContent || 'Failed to submit booking';
       }
-
+      
+      if (errorOccurred) {
+        throw new Error(errorMessage);
+      }
+      
+      // If we got here and have data but response is not ok, extract error from data
       if (!response.ok) {
-        // Show more detailed error if available
-        const errorMsg = data.details 
+        const errorMsg = data?.details 
           ? `${data.error || data.message}: ${data.details}`
-          : (data.error || data.message || data.errors?.join(', ') || 'Failed to submit booking');
+          : (data?.error || data?.message || data?.errors?.join(', ') || 'Failed to submit booking');
         throw new Error(errorMsg);
       }
 

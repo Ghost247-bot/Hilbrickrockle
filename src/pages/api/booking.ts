@@ -363,17 +363,39 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
-    // Parse form data with files
-    const form = formidable({
-      uploadDir: path.join(process.cwd(), 'public', 'uploads', 'booking'),
-      keepExtensions: true,
-      maxFileSize: 10 * 1024 * 1024, // 10MB
-    });
-
-    // Ensure upload directory exists
+    // Ensure upload directory exists first
     const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'booking');
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
+    try {
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+    } catch (dirError: any) {
+      logger.error('Error creating upload directory', {
+        error: dirError instanceof Error ? dirError.message : 'Unknown error',
+      });
+      return res.status(500).json({
+        error: 'Server configuration error',
+        message: 'Failed to create upload directory. Please contact support.',
+      });
+    }
+
+    // Parse form data with files
+    let form: any;
+    try {
+      form = formidable({
+        uploadDir: uploadDir,
+        keepExtensions: true,
+        maxFileSize: 10 * 1024 * 1024, // 10MB
+        multiples: true,
+      });
+    } catch (formError: any) {
+      logger.error('Error creating formidable form', {
+        error: formError instanceof Error ? formError.message : 'Unknown error',
+      });
+      return res.status(500).json({
+        error: 'Server configuration error',
+        message: 'Failed to initialize file upload handler.',
+      });
     }
 
     let fields: any, files: any;
@@ -382,21 +404,30 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     } catch (parseError: any) {
       logger.error('Error parsing form data', {
         error: parseError instanceof Error ? parseError.message : 'Unknown parse error',
+        code: parseError?.code,
         stack: parseError instanceof Error ? parseError.stack : undefined,
       });
       
       // Handle specific formidable errors
-      if (parseError?.code === 'LIMIT_FILE_SIZE') {
+      if (parseError?.code === 'LIMIT_FILE_SIZE' || parseError?.message?.includes('File size')) {
         return res.status(400).json({
           error: 'File too large',
           message: 'File size exceeds the maximum allowed size of 10MB',
         });
       }
       
-      if (parseError?.code === 'LIMIT_PART_COUNT') {
+      if (parseError?.code === 'LIMIT_PART_COUNT' || parseError?.message?.includes('parts')) {
         return res.status(400).json({
           error: 'Too many files',
           message: 'Too many files uploaded. Please reduce the number of files.',
+        });
+      }
+
+      // Handle request already consumed errors
+      if (parseError?.message?.includes('request') || parseError?.code === 'ECONNRESET') {
+        return res.status(400).json({
+          error: 'Invalid request',
+          message: 'The request could not be processed. Please try again.',
         });
       }
       
@@ -623,5 +654,39 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withErrorHandler(withRateLimit(handler));
+// Wrap handler with additional error catching to ensure JSON responses
+const wrappedHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+  // Set JSON content type immediately
+  res.setHeader('Content-Type', 'application/json');
+  
+  try {
+    // Ensure response hasn't been sent
+    if (res.headersSent) {
+      return;
+    }
+    
+    // Call the actual handler wrapped in middleware
+    await withErrorHandler(withRateLimit(handler))(req, res);
+  } catch (error: any) {
+    // Final catch-all - ensures we always return JSON
+    if (!res.headersSent) {
+      logger.error('Unhandled error in booking API wrapper', {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+      
+      try {
+        res.status(500).json({
+          error: 'Internal server error',
+          message: error instanceof Error ? error.message : 'An unexpected error occurred',
+        });
+      } catch (sendError) {
+        // Response already sent, log only
+        logger.error('Failed to send error response', { sendError });
+      }
+    }
+  }
+};
+
+export default wrappedHandler;
 
