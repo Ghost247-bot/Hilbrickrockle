@@ -87,12 +87,20 @@ const BookingPage: React.FC = () => {
         
         if (!response.ok) {
           // Try to get error message from response
+          const contentType = response.headers.get('content-type');
           let errorData;
-          try {
-            errorData = await response.json();
-          } catch (e) {
-            errorData = { error: `HTTP ${response.status}: ${response.statusText}` };
+          
+          if (contentType && contentType.includes('application/json')) {
+            try {
+              errorData = await response.json();
+            } catch (e) {
+              errorData = { error: `HTTP ${response.status}: ${response.statusText}` };
+            }
+          } else {
+            const text = await response.text();
+            errorData = { error: text || `HTTP ${response.status}: ${response.statusText}` };
           }
+          
           console.error('Error response:', errorData);
           
           // For 500 errors, show user-friendly message
@@ -103,7 +111,25 @@ const BookingPage: React.FC = () => {
             setErrorMessage(errorData.message || errorData.error || 'Failed to load lawyer list. Lawyer selection is optional - you can still proceed with your booking.');
           }
         } else {
-          const data = await response.json();
+          // Check content-type for successful response too
+          const contentType = response.headers.get('content-type');
+          let data;
+          
+          if (contentType && contentType.includes('application/json')) {
+            try {
+              data = await response.json();
+            } catch (jsonError) {
+              console.error('Failed to parse JSON response:', jsonError);
+              setErrorMessage('Invalid response from server. Lawyer selection is optional - you can still proceed with your booking.');
+              setLoadingLawyers(false);
+              return;
+            }
+          } else {
+            console.error('Non-JSON response received');
+            setErrorMessage('Unexpected response format. Lawyer selection is optional - you can still proceed with your booking.');
+            setLoadingLawyers(false);
+            return;
+          }
           console.log('Lawyers data received:', data);
           console.log('Number of lawyers:', data.lawyers?.length || 0);
           
@@ -215,13 +241,27 @@ const BookingPage: React.FC = () => {
         body: formDataToSend,
       });
 
-      const data = await response.json();
+      // Check if response is ok before parsing
+      const contentType = response.headers.get('content-type');
+      let data;
+      
+      if (contentType && contentType.includes('application/json')) {
+        try {
+          data = await response.json();
+        } catch (jsonError) {
+          throw new Error('Invalid response from server');
+        }
+      } else {
+        // If not JSON, read as text to get error message
+        const text = await response.text();
+        throw new Error(text || 'Failed to submit booking');
+      }
 
       if (!response.ok) {
         // Show more detailed error if available
         const errorMsg = data.details 
           ? `${data.error || data.message}: ${data.details}`
-          : (data.error || data.message || 'Failed to submit booking');
+          : (data.error || data.message || data.errors?.join(', ') || 'Failed to submit booking');
         throw new Error(errorMsg);
       }
 

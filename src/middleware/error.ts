@@ -11,6 +11,9 @@ try {
 
 export function withErrorHandler(handler: Function) {
   return async (req: NextApiRequest, res: NextApiResponse) => {
+    // Ensure all responses are JSON
+    res.setHeader('Content-Type', 'application/json');
+    
     // Prevent multiple responses
     let responseSent = false;
     const originalJson = res.json.bind(res);

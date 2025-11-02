@@ -149,10 +149,37 @@ export default function ContactForm() {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      // Check if response is ok before parsing
+      const contentType = response.headers.get('content-type');
+      let data;
+      
+      if (contentType && contentType.includes('application/json')) {
+        try {
+          data = await response.json();
+        } catch (jsonError) {
+          throw new Error('Invalid response from server');
+        }
+      } else {
+        // If not JSON, read as text to get error message
+        const text = await response.text();
+        throw new Error(text || 'Failed to submit form');
+      }
 
       if (!response.ok) {
-        throw new Error(data.errors?.join(', ') || 'Failed to submit form');
+        // Handle different error response formats
+        let errorMessage = 'Failed to submit form';
+        
+        if (data.errors && Array.isArray(data.errors)) {
+          errorMessage = data.errors.join(', ');
+        } else if (data.error) {
+          errorMessage = data.error;
+        } else if (data.message) {
+          errorMessage = data.message;
+        } else if (data.details) {
+          errorMessage = data.details;
+        }
+        
+        throw new Error(errorMessage);
       }
 
       setIsSuccess(true);

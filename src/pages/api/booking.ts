@@ -354,6 +354,9 @@ async function sendBookingEmail(
 }
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Ensure all responses are JSON
+  res.setHeader('Content-Type', 'application/json');
+  
   if (req.method !== 'POST') {
     logger.warn('Invalid method for booking submission', { method: req.method });
     return res.status(405).json({ error: 'Method not allowed' });
@@ -373,7 +376,35 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
 
-    const [fields, files] = await form.parse(req);
+    let fields: any, files: any;
+    try {
+      [fields, files] = await form.parse(req);
+    } catch (parseError: any) {
+      logger.error('Error parsing form data', {
+        error: parseError instanceof Error ? parseError.message : 'Unknown parse error',
+        stack: parseError instanceof Error ? parseError.stack : undefined,
+      });
+      
+      // Handle specific formidable errors
+      if (parseError?.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({
+          error: 'File too large',
+          message: 'File size exceeds the maximum allowed size of 10MB',
+        });
+      }
+      
+      if (parseError?.code === 'LIMIT_PART_COUNT') {
+        return res.status(400).json({
+          error: 'Too many files',
+          message: 'Too many files uploaded. Please reduce the number of files.',
+        });
+      }
+      
+      return res.status(400).json({
+        error: 'Invalid form data',
+        message: parseError instanceof Error ? parseError.message : 'Failed to parse form data',
+      });
+    }
 
     // Extract booking data
     const bookingData: BookingData = {

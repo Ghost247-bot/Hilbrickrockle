@@ -207,6 +207,9 @@ async function sendContactEmail(contactData: ContactData): Promise<void> {
 }
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Ensure all responses are JSON
+  res.setHeader('Content-Type', 'application/json');
+  
   if (req.method !== 'POST') {
     logger.warn('Invalid method for contact submission', { method: req.method });
     return res.status(405).json({ error: 'Method not allowed' });

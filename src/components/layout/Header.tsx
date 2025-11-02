@@ -54,18 +54,54 @@ const Header: React.FC = () => {
   useEffect(() => {
     // Check user session
     const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user || null);
-      setIsLoading(false);
+      try {
+        // Only run in browser environment
+        if (typeof window === 'undefined') {
+          setIsLoading(false);
+          return;
+        }
+
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) {
+          console.error('Error getting session:', error);
+          setUser(null);
+        } else {
+          setUser(session?.user || null);
+        }
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error checking user session:', error);
+        setUser(null);
+        setIsLoading(false);
+      }
     };
     checkUser();
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
-    });
+    let subscription: { unsubscribe: () => void } | null = null;
+    try {
+      // Only set up subscription in browser environment
+      if (typeof window !== 'undefined') {
+        const authStateChangeResult = supabase.auth.onAuthStateChange((_event, session) => {
+          setUser(session?.user || null);
+        });
+        if (authStateChangeResult?.data?.subscription) {
+          subscription = authStateChangeResult.data.subscription;
+        }
+      }
+    } catch (error) {
+      console.error('Error setting up auth state listener:', error);
+    }
 
-    return () => subscription.unsubscribe();
+    return () => {
+      if (subscription) {
+        try {
+          subscription.unsubscribe();
+        } catch (error) {
+          console.error('Error unsubscribing from auth state changes:', error);
+        }
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -85,9 +121,16 @@ const Header: React.FC = () => {
   }, []);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    setIsUserMenuOpen(false);
-    router.push('/');
+    try {
+      await supabase.auth.signOut();
+      setUser(null);
+      setIsUserMenuOpen(false);
+      router.push('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
+      setIsUserMenuOpen(false);
+      router.push('/');
+    }
   };
 
   const navigation: NavigationItem[] = [
