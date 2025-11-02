@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, ReactElement } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../../lib/supabase';
 import AdminLayout from '../../components/admin/AdminLayout';
+import type { NextPage } from 'next';
 
 interface Lawyer {
   id: string;
@@ -17,7 +18,7 @@ interface Lawyer {
   updated_at: string;
 }
 
-const AdminLawyers = () => {
+const AdminLawyers: NextPage = () => {
   const router = useRouter();
   const [lawyers, setLawyers] = useState<Lawyer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -214,8 +215,7 @@ const AdminLawyers = () => {
   };
 
   return (
-    <AdminLayout>
-      <div className="space-y-4 sm:space-y-6">
+    <div className="space-y-4 sm:space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Lawyers</h1>
@@ -471,8 +471,11 @@ const AdminLawyers = () => {
           </div>
         )}
       </div>
-    </AdminLayout>
   );
+};
+
+AdminLawyers.getLayout = function getLayout(page: ReactElement) {
+  return <AdminLayout>{page}</AdminLayout>;
 };
 
 export default AdminLawyers;
