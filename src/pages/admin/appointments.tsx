@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, ReactElement } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../../lib/supabase';
 import AdminLayout from '../../components/admin/AdminLayout';
+import type { NextPage } from 'next';
 
 interface Document {
   filename: string;
@@ -27,7 +28,7 @@ interface Appointment {
   lawyers: { name: string; lawyer_id: string } | null;
 }
 
-const AdminAppointments = () => {
+const AdminAppointments: NextPage = () => {
   const router = useRouter();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -170,8 +171,7 @@ const AdminAppointments = () => {
   };
 
   return (
-    <AdminLayout>
-      <div className="space-y-4 sm:space-y-6">
+    <div className="space-y-4 sm:space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Appointments</h1>
@@ -470,8 +470,11 @@ const AdminAppointments = () => {
           </div>
         )}
       </div>
-    </AdminLayout>
   );
+};
+
+AdminAppointments.getLayout = function getLayout(page: ReactElement) {
+  return <AdminLayout>{page}</AdminLayout>;
 };
 
 export default AdminAppointments;
