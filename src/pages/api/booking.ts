@@ -416,11 +416,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
       [fields, files] = await form.parse(req);
     } catch (parseError: any) {
+      const errorMsg = parseError instanceof Error ? parseError.message : 'Unknown parse error';
       logger.error('Error parsing form data', {
-        error: parseError instanceof Error ? parseError.message : 'Unknown parse error',
+        error: errorMsg,
         code: parseError?.code,
         stack: parseError instanceof Error ? parseError.stack : undefined,
       });
+      console.error('Error parsing form data:', errorMsg, 'Code:', parseError?.code);
       
       // Handle specific formidable errors
       if (parseError?.code === 'LIMIT_FILE_SIZE' || parseError?.message?.includes('File size')) {
