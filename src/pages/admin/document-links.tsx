@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../../lib/supabase';
-import AdminLayout from '@/components/admin/AdminLayout';
+import AdminLayout from '../../components/admin/AdminLayout';
 
 interface DocumentLink {
   id: string;

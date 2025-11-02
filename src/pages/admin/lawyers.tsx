@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../../lib/supabase';
-import AdminLayout from '@/components/admin/AdminLayout';
+import AdminLayout from '../../components/admin/AdminLayout';
 
 interface Lawyer {
   id: string;
@@ -17,7 +17,7 @@ interface Lawyer {
   updated_at: string;
 }
 
-const AdminLawyers: React.FC = () => {
+const AdminLawyers = () => {
   const router = useRouter();
   const [lawyers, setLawyers] = useState<Lawyer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -208,7 +208,7 @@ const AdminLawyers: React.FC = () => {
     setEditingLawyer(null);
   };
 
-  const statusColors: Record<string, string> = {
+  const statusColors = {
     active: 'bg-green-100 text-green-800',
     inactive: 'bg-gray-100 text-gray-800',
   };

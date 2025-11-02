@@ -27,7 +27,7 @@ interface Appointment {
   lawyers: { name: string; lawyer_id: string } | null;
 }
 
-const AdminAppointments: React.FC = () => {
+const AdminAppointments = () => {
   const router = useRouter();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -134,7 +134,7 @@ const AdminAppointments: React.FC = () => {
       setAppointments(prev =>
         prev.map(apt => apt.id === id ? { ...apt, status: newStatus } : apt)
       );
-
+      
       // Close cancel confirmation if it was open
       setShowCancelConfirm(null);
     } catch (err) {
@@ -162,14 +162,14 @@ const AdminAppointments: React.FC = () => {
     });
   };
 
-  const statusColors: Record<string, string> = {
+  const statusColors = {
     pending: 'bg-yellow-100 text-yellow-800',
     confirmed: 'bg-green-100 text-green-800',
     cancelled: 'bg-red-100 text-red-800',
     completed: 'bg-blue-100 text-blue-800',
   };
 
-  const content = (
+  return (
     <AdminLayout>
       <div className="space-y-4 sm:space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
@@ -472,8 +472,6 @@ const AdminAppointments: React.FC = () => {
       </div>
     </AdminLayout>
   );
-
-  return content;
 };
 
 export default AdminAppointments;
