@@ -169,7 +169,7 @@ const AdminAppointments: React.FC = () => {
     completed: 'bg-blue-100 text-blue-800',
   };
 
-  return (
+  const content = (
     <AdminLayout>
       <div className="space-y-4 sm:space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
@@ -472,6 +472,8 @@ const AdminAppointments: React.FC = () => {
       </div>
     </AdminLayout>
   );
+
+  return content;
 };
 
 export default AdminAppointments;
