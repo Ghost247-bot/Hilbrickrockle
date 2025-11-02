@@ -357,12 +357,20 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   // Ensure all responses are JSON
   res.setHeader('Content-Type', 'application/json');
   
+  console.log('Booking API handler called', { 
+    method: req.method, 
+    url: req.url,
+    contentType: req.headers['content-type'] 
+  });
+  
   if (req.method !== 'POST') {
     logger.warn('Invalid method for booking submission', { method: req.method });
+    console.error('Invalid method:', req.method);
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
+    console.log('Starting booking processing...');
     // Use temp directory for serverless environments (Netlify, Vercel, etc.)
     // On serverless platforms, /tmp is the only writable directory
     // Check multiple environment variables to detect serverless
@@ -372,21 +380,32 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       process.env.AWS_LAMBDA_FUNCTION_NAME ||
       process.env.NETLIFY;
     
+    console.log('Environment check:', {
+      isServerless,
+      VERCEL: !!process.env.VERCEL,
+      NETLIFY_DEPLOY_PRIME_URL: !!process.env.NETLIFY_DEPLOY_PRIME_URL,
+      AWS_LAMBDA: !!process.env.AWS_LAMBDA_FUNCTION_NAME,
+      NETLIFY: !!process.env.NETLIFY,
+    });
+    
     const tempDir = isServerless 
       ? '/tmp' 
       : path.join(process.cwd(), 'public', 'uploads', 'booking');
+    
+    console.log('Using temp directory:', tempDir);
     
     // Ensure upload directory exists first
     try {
       if (!fs.existsSync(tempDir)) {
         fs.mkdirSync(tempDir, { recursive: true });
       }
+      console.log('Directory ready:', tempDir);
     } catch (dirError: any) {
       logger.error('Error creating upload directory', {
         error: dirError instanceof Error ? dirError.message : 'Unknown error',
         tempDir,
       });
-      console.error('Error creating upload directory:', dirError.message);
+      console.error('Error creating upload directory:', dirError.message, 'tempDir:', tempDir);
       // Don't fail in serverless - continue without file storage
       logger.warn('Continuing without file storage - serverless environment detected');
     }
