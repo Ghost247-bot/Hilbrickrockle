@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -90,22 +90,42 @@ const allNewsItems = [
 
 const ITEMS_PER_PAGE = 4;
 
-const NewsList: React.FC = () => {
+interface NewsListProps {
+  selectedCategory?: string;
+}
+
+const NewsList: React.FC<NewsListProps> = ({ selectedCategory = '' }) => {
   const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Filter news items by category
+  const filteredNewsItems = selectedCategory
+    ? allNewsItems.filter(item => item.category === selectedCategory)
+    : allNewsItems;
 
   const handleLoadMore = async () => {
     setIsLoading(true);
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 1000));
-    setDisplayCount(prev => Math.min(prev + ITEMS_PER_PAGE, allNewsItems.length));
+    setDisplayCount(prev => Math.min(prev + ITEMS_PER_PAGE, filteredNewsItems.length));
     setIsLoading(false);
   };
 
+  // Reset display count when category changes
+  useEffect(() => {
+    setDisplayCount(ITEMS_PER_PAGE);
+  }, [selectedCategory]);
+
   return (
     <section className="space-y-4 sm:space-y-6 lg:space-y-8">
-      <AnimatePresence>
-        {allNewsItems.slice(0, displayCount).map((item, index) => (
+      {filteredNewsItems.length === 0 ? (
+        <div className="text-center py-12">
+          <p className="text-gray-500 text-lg">No news items found in this category.</p>
+        </div>
+      ) : (
+        <>
+          <AnimatePresence>
+            {filteredNewsItems.slice(0, displayCount).map((item, index) => (
           <motion.article
             key={item.id}
             initial={{ opacity: 0, y: 20 }}
@@ -153,12 +173,12 @@ const NewsList: React.FC = () => {
                 </div>
               </div>
             </div>
-          </motion.article>
-        ))}
-      </AnimatePresence>
+            </motion.article>
+            ))}
+          </AnimatePresence>
 
-      {/* Load More Button */}
-      {displayCount < allNewsItems.length && (
+          {/* Load More Button */}
+          {displayCount < filteredNewsItems.length && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -184,15 +204,17 @@ const NewsList: React.FC = () => {
         </motion.div>
       )}
 
-      {/* No More Items Message */}
-      {displayCount >= allNewsItems.length && (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center text-gray-500 pt-8"
-        >
-          You've reached the end of the list
-        </motion.p>
+          {/* No More Items Message */}
+          {displayCount >= filteredNewsItems.length && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center text-gray-500 pt-8"
+            >
+              You've reached the end of the list
+            </motion.p>
+          )}
+        </>
       )}
     </section>
   );

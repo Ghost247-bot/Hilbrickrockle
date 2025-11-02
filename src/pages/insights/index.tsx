@@ -20,7 +20,7 @@ const InsightsPage: React.FC = () => {
         <motion.section 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="relative bg-blue-900 text-white py-12 sm:py-16 lg:py-20"
+          className="relative bg-blue-900 text-white py-12 sm:py-16 lg:py-20 mt-16"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.h1 

@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiX, FiPhone, FiMail, FiMapPin } from 'react-icons/fi';
 
 const offices = [
   'Lincoln',
@@ -18,6 +20,89 @@ const offices = [
   'Boston',
   'Houston',
 ];
+
+// Office details mapping
+const officeDetails: Record<string, {
+  address: string;
+  phone: string;
+  email: string;
+}> = {
+  'Lincoln': {
+    address: 'South 13th Street, Lincoln, Nebraska 68508',
+    phone: '+1 (402) 906-1200',
+    email: 'newyork@hilbrickrockle.pro'
+  },
+  'London': {
+    address: '99 Bishopsgate, London EC2M 3XF, United Kingdom',
+    phone: '+44 20 7710 1000',
+    email: 'london@hilbrickrockle.pro'
+  },
+  'Singapore': {
+    address: 'One Raffles Quay, North Tower, Level 25, Singapore 048583',
+    phone: '+65 6535 6000',
+    email: 'singapore@hilbrickrockle.pro'
+  },
+  'Hong Kong': {
+    address: 'One International Finance Centre, 1 Harbour View Street, Central, Hong Kong',
+    phone: '+852 2522 7888',
+    email: 'hongkong@hilbrickrockle.pro'
+  },
+  'Tokyo': {
+    address: 'Marunouchi Building, 2-4-1 Marunouchi, Chiyoda-ku, Tokyo 100-6325',
+    phone: '+81 3 6212 3900',
+    email: 'tokyo@hilbrickrockle.pro'
+  },
+  'Dubai': {
+    address: 'Burj Khalifa, Downtown Dubai, Dubai, UAE',
+    phone: '+971 4 437 2100',
+    email: 'dubai@hilbrickrockle.pro'
+  },
+  'Paris': {
+    address: '15 Avenue Matignon, 75008 Paris, France',
+    phone: '+33 1 42 68 53 00',
+    email: 'paris@hilbrickrockle.pro'
+  },
+  'Frankfurt': {
+    address: 'Taunustor 1, 60310 Frankfurt, Germany',
+    phone: '+49 69 6062 6000',
+    email: 'frankfurt@hilbrickrockle.pro'
+  },
+  'Milan': {
+    address: 'Via Brera 3, 20121 Milan, Italy',
+    phone: '+39 02 8888 1000',
+    email: 'milan@hilbrickrockle.pro'
+  },
+  'Los Angeles': {
+    address: '555 West 5th Street, Los Angeles, CA 90013',
+    phone: '+1 (213) 892-1000',
+    email: 'losangeles@hilbrickrockle.pro'
+  },
+  'San Francisco': {
+    address: '101 California Street, San Francisco, CA 94111',
+    phone: '+1 (415) 777-1000',
+    email: 'sanfrancisco@hilbrickrockle.pro'
+  },
+  'Chicago': {
+    address: '233 South Wacker Drive, Chicago, IL 60606',
+    phone: '+1 (312) 876-1000',
+    email: 'chicago@hilbrickrockle.pro'
+  },
+  'Washington, D.C.': {
+    address: '1400 New York Avenue NW, Washington, DC 20005',
+    phone: '+1 (202) 555-1000',
+    email: 'washington@hilbrickrockle.pro'
+  },
+  'Boston': {
+    address: '200 State Street, Boston, MA 02109',
+    phone: '+1 (617) 555-1000',
+    email: 'boston@hilbrickrockle.pro'
+  },
+  'Houston': {
+    address: '1000 Main Street, Houston, TX 77002',
+    phone: '+1 (713) 555-1000',
+    email: 'houston@hilbrickrockle.pro'
+  }
+};
 
 const socialLinks = [
   { name: 'LinkedIn', href: 'https://www.linkedin.com/company/hrlaw', icon: (props: any) => (
@@ -51,6 +136,29 @@ const footerLinks = [
 ];
 
 const Footer = () => {
+  const [selectedOffice, setSelectedOffice] = useState<string | null>(null);
+
+  const handleOfficeClick = (office: string) => {
+    if (officeDetails[office]) {
+      setSelectedOffice(office);
+      // Prevent body scroll when modal is open
+      document.body.style.overflow = 'hidden';
+    }
+  };
+
+  const handleCloseModal = () => {
+    setSelectedOffice(null);
+    // Restore body scroll when modal is closed
+    document.body.style.overflow = '';
+  };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -97,16 +205,92 @@ const Footer = () => {
         <div className="py-4 border-t border-gray-800">
           <div className="flex flex-wrap gap-x-6 gap-y-2 items-center justify-center text-sm">
             {offices.map((office) => (
-              <Link
+              <button
                 key={office}
-                href="#"
-                className="text-gray-400 hover:text-white whitespace-nowrap"
+                onClick={() => handleOfficeClick(office)}
+                className="text-gray-400 hover:text-white whitespace-nowrap transition-colors cursor-pointer"
               >
                 {office}
-              </Link>
+              </button>
             ))}
           </div>
         </div>
+
+        {/* Office Details Modal */}
+        <AnimatePresence>
+          {selectedOffice && officeDetails[selectedOffice] && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={handleCloseModal}
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+              />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] sm:w-full max-w-md bg-white rounded-lg sm:rounded-xl shadow-xl p-4 sm:p-6 max-h-[90vh] overflow-y-auto"
+                style={{ margin: 0 }}
+              >
+                <div className="flex justify-between items-start mb-3 sm:mb-4">
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 pr-2">{selectedOffice}</h3>
+                  <button
+                    onClick={handleCloseModal}
+                    className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0 p-1"
+                    aria-label="Close modal"
+                  >
+                    <FiX className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </button>
+                </div>
+                <div className="space-y-3 sm:space-y-4">
+                  <div className="flex items-start space-x-2 sm:space-x-3">
+                    <FiMapPin className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 mt-1 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs sm:text-sm text-gray-500 mb-1">Address</p>
+                      <p className="text-sm sm:text-base text-gray-900 break-words">{officeDetails[selectedOffice].address}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-2 sm:space-x-3">
+                    <FiPhone className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 mt-1 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs sm:text-sm text-gray-500 mb-1">Phone</p>
+                      <a 
+                        href={`tel:${officeDetails[selectedOffice].phone}`} 
+                        className="text-sm sm:text-base text-blue-600 hover:text-blue-700 break-all"
+                      >
+                        {officeDetails[selectedOffice].phone}
+                      </a>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-2 sm:space-x-3">
+                    <FiMail className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 mt-1 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs sm:text-sm text-gray-500 mb-1">Email</p>
+                      <a 
+                        href={`mailto:${officeDetails[selectedOffice].email}`} 
+                        className="text-sm sm:text-base text-blue-600 hover:text-blue-700 break-all"
+                      >
+                        {officeDetails[selectedOffice].email}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200">
+                  <Link
+                    href="/contact"
+                    className="block w-full text-center px-4 py-2.5 sm:py-2 text-sm sm:text-base bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                    onClick={handleCloseModal}
+                  >
+                    Contact This Office
+                  </Link>
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
 
         {/* Legal Notice */}
         <div className="border-t border-gray-800 pt-6 mt-6">

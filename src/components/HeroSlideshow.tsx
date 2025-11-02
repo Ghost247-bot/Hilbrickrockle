@@ -79,7 +79,7 @@ const HeroSlideshow: React.FC = () => {
   };
 
   return (
-    <div className="relative h-[70vh] bg-gray-900 overflow-hidden">
+    <div className="relative h-[70vh] bg-gray-900 overflow-hidden mt-16">
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={currentSlide}

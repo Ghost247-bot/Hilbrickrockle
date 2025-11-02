@@ -4,7 +4,8 @@ import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FiArrowLeft, FiCalendar, FiUser, FiClock, FiShare2, FiTag } from 'react-icons/fi';
+import { FiArrowLeft, FiCalendar, FiUser, FiClock, FiTag } from 'react-icons/fi';
+import ShareButton from '@/components/ShareButton';
 
 interface NewsArticle {
   id: number;
@@ -119,7 +120,7 @@ const NewsDetailPage: React.FC = () => {
       </Head>
 
       {/* Hero Section */}
-      <section className="relative h-[60vh] bg-gradient-to-br from-blue-900 to-purple-900 text-white overflow-hidden">
+      <section className="relative h-[60vh] bg-gradient-to-br from-blue-900 to-purple-900 text-white overflow-hidden mt-16">
         <div className="absolute inset-0">
           <Image
             src={article.image}
@@ -182,10 +183,7 @@ const NewsDetailPage: React.FC = () => {
               </span>
             ))}
           </div>
-          <button className="flex items-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-            <FiShare2 className="mr-2" />
-            Share
-          </button>
+          <ShareButton title={article.title} />
         </div>
 
         <motion.div

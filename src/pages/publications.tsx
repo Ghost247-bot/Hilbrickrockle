@@ -91,7 +91,7 @@ const PublicationsPage: React.FC = () => {
       </Head>
 
       {/* Hero Section */}
-      <section className="relative h-[35vh] sm:h-[45vh] md:h-[50vh] bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white">
+      <section className="relative h-[35vh] sm:h-[45vh] md:h-[50vh] bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white mt-16">
         <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-10" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
           <motion.div

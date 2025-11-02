@@ -53,7 +53,7 @@ const DiversityPage: React.FC = () => {
       </Head>
 
       {/* Hero Section */}
-      <section className="relative h-[60vh] bg-gradient-to-br from-purple-900 via-pink-900 to-rose-900 text-white overflow-hidden">
+      <section className="relative h-[60vh] bg-gradient-to-br from-purple-900 via-pink-900 to-rose-900 text-white overflow-hidden mt-16">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-900/90 to-pink-900/90" />
         </div>

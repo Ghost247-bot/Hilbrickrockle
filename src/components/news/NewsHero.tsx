@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
@@ -8,11 +8,23 @@ import SubscribeForm from './SubscribeForm';
 const NewsHero: React.FC = () => {
   const [showSubscribe, setShowSubscribe] = useState(false);
 
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (showSubscribe) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showSubscribe]);
+
   return (
     <motion.section 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="relative h-[550px] sm:h-[600px] lg:h-[650px] bg-blue-900 text-white overflow-hidden"
+      className="relative h-[550px] sm:h-[600px] lg:h-[650px] bg-blue-900 text-white overflow-hidden mt-16"
     >
       {/* Background Image */}
       <div className="absolute inset-0">
@@ -96,18 +108,25 @@ const NewsHero: React.FC = () => {
                 className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
               />
               <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] sm:w-full max-w-md max-h-[90vh] overflow-y-auto"
+                style={{ margin: 0 }}
               >
-                <SubscribeForm />
-                <button
-                  onClick={() => setShowSubscribe(false)}
-                  className="absolute -top-12 right-0 text-white/80 hover:text-white"
-                >
-                  Close
-                </button>
+                <div className="relative bg-white rounded-lg sm:rounded-xl shadow-xl">
+                  <button
+                    onClick={() => setShowSubscribe(false)}
+                    className="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-400 hover:text-gray-600 transition-colors z-10 p-2"
+                    aria-label="Close modal"
+                  >
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                  <SubscribeForm />
+                </div>
               </motion.div>
             </>
           )}

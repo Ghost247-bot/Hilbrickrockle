@@ -49,7 +49,7 @@ const CapabilitiesPage: NextPage = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="bg-gray-900 text-white">
+      <div className="bg-gray-900 text-white mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
           <h1 className="text-3xl sm:text-4xl font-bold mb-4 sm:mb-6">Capabilities</h1>
           <p className="text-lg sm:text-xl text-gray-300 max-w-3xl">

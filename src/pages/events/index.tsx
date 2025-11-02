@@ -64,7 +64,7 @@ const EventsPage: React.FC = () => {
       </Head>
 
       {/* Hero Section */}
-      <section className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] bg-gray-900 text-white">
+      <section className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] bg-gray-900 text-white mt-16">
         <div className="absolute inset-0">
           <img
             className="w-full h-full object-cover opacity-50"

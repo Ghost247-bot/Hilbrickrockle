@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import NewsHero from '@/components/news/NewsHero';
 import NewsList from '@/components/news/NewsList';
 import NewsCategories from '@/components/news/NewsCategories';
 
 const NewsPage: React.FC = () => {
+  const [selectedCategory, setSelectedCategory] = useState('');
+
   return (
     <>
       <Head>
@@ -17,10 +19,13 @@ const NewsPage: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
         {/* Categories */}
-        <NewsCategories />
+        <NewsCategories 
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+        />
 
         {/* News List */}
-        <NewsList />
+        <NewsList selectedCategory={selectedCategory} />
       </div>
     </>
   );

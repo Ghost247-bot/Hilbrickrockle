@@ -61,7 +61,7 @@ const GlobalCitizenshipPage: NextPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Hero Section */}
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden mt-16">
         <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-blue-900 to-slate-900" />
         <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-10" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">

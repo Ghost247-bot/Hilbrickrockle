@@ -106,7 +106,7 @@ const EmploymentLawPage: React.FC = () => {
       </Head>
 
       {/* Hero Section */}
-      <section className="relative h-[60vh] bg-gradient-to-br from-amber-900 via-amber-800 to-amber-900 text-white">
+      <section className="relative h-[60vh] bg-gradient-to-br from-amber-900 via-amber-800 to-amber-900 text-white mt-16">
         <div className="absolute inset-0 bg-black/30"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
           <motion.div

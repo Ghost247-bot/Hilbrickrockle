@@ -57,7 +57,7 @@ const SustainabilityPage: React.FC = () => {
       </Head>
 
       {/* Hero Section */}
-      <section className="relative h-[60vh] bg-gradient-to-br from-green-900 via-emerald-900 to-teal-900 text-white overflow-hidden">
+      <section className="relative h-[60vh] bg-gradient-to-br from-green-900 via-emerald-900 to-teal-900 text-white overflow-hidden mt-16">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-r from-green-900/90 to-emerald-900/90" />
         </div>

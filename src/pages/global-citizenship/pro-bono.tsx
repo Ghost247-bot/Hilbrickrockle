@@ -60,7 +60,7 @@ const ProBonoPage: React.FC = () => {
       </Head>
 
       {/* Hero Section */}
-      <section className="relative h-[60vh] bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 text-white overflow-hidden">
+      <section className="relative h-[60vh] bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 text-white overflow-hidden mt-16">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-indigo-900/90" />
         </div>

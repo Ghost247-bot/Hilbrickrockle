@@ -3,7 +3,8 @@ import Head from 'next/head';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FiArrowLeft, FiCalendar, FiUser, FiClock, FiShare2 } from 'react-icons/fi';
+import { FiArrowLeft, FiCalendar, FiUser, FiClock } from 'react-icons/fi';
+import ShareButton from '@/components/ShareButton';
 
 const SustainableFinancePage: React.FC = () => {
   const relatedArticles = [
@@ -38,7 +39,7 @@ const SustainableFinancePage: React.FC = () => {
       </Head>
 
       {/* Hero Section */}
-      <section className="relative h-[60vh] bg-gradient-to-br from-green-800 via-emerald-900 to-teal-900 text-white overflow-hidden">
+      <section className="relative h-[60vh] bg-gradient-to-br from-green-800 via-emerald-900 to-teal-900 text-white overflow-hidden mt-16">
         <div className="absolute inset-0">
           <Image
             src="/images/sustainable-finance.jpg"
@@ -93,10 +94,7 @@ const SustainableFinancePage: React.FC = () => {
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="prose prose-lg max-w-none">
           <div className="flex items-center justify-between mb-8">
-            <button className="flex items-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-              <FiShare2 className="mr-2" />
-              Share Article
-            </button>
+            <ShareButton title="Sustainable Finance Initiative | HilbrickRockle" />
           </div>
 
           <motion.div
