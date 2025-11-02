@@ -2,7 +2,6 @@ import React, { useEffect, useState, ReactElement } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../../lib/supabase';
 import AdminLayout from '../../components/admin/AdminLayout';
-import type { NextPage } from 'next';
 
 interface Document {
   filename: string;
@@ -35,7 +34,7 @@ const statusColors: Record<string, string> = {
   completed: 'bg-blue-100 text-blue-800',
 };
 
-const AdminAppointments: NextPage = () => {
+const AdminAppointments = () => {
   const router = useRouter();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
