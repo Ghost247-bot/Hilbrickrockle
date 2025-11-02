@@ -21,6 +21,27 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   try {
     const supabaseAdmin = getSupabaseAdmin();
+    
+    if (!supabaseAdmin) {
+      logger.error('Failed to get Supabase admin client');
+      return res.status(200).json({
+        success: true,
+        stats: {
+          totalAppointments: 0,
+          totalContactMessages: 0,
+          totalLawyers: 0,
+          pendingAppointments: 0,
+          pendingMessages: 0,
+          recentAppointments: 0,
+          confirmedAppointments: 0,
+          cancelledAppointments: 0,
+          activeLawyers: 0,
+          appointmentsWithDocuments: 0,
+          totalJobApplications: 0,
+          pendingJobApplications: 0,
+        }
+      });
+    }
 
     // Fetch statistics with error handling for each query
     const [

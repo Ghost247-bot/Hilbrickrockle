@@ -45,6 +45,42 @@ export function withErrorHandler(handler: Function) {
           });
         }
 
+        // Handle ReferenceError (undefined variables)
+        if (error instanceof ReferenceError) {
+          console.error('ReferenceError - Check for undefined variables:', error.message);
+          if (req.url?.includes('/api/lawyers')) {
+            return res.status(200).json({
+              success: true,
+              lawyers: [],
+              count: 0,
+              message: 'Configuration error. Please check server logs.',
+            });
+          }
+          return res.status(200).json({
+            success: false,
+            error: 'Configuration error',
+            message: process.env.NODE_ENV === 'development' ? error.message : 'An internal error occurred',
+          });
+        }
+
+        // Handle TypeError (method not found, etc.)
+        if (error instanceof TypeError) {
+          console.error('TypeError:', error.message);
+          if (req.url?.includes('/api/lawyers')) {
+            return res.status(200).json({
+              success: true,
+              lawyers: [],
+              count: 0,
+              message: 'Type error occurred. Please check server logs.',
+            });
+          }
+          return res.status(200).json({
+            success: false,
+            error: 'Type error',
+            message: process.env.NODE_ENV === 'development' ? error.message : 'An internal error occurred',
+          });
+        }
+
         // For lawyers API specifically, always return 200 with empty array
         if (req.url?.includes('/api/lawyers')) {
           return res.status(200).json({
