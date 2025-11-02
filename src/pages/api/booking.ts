@@ -791,18 +791,25 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 // Wrap handler with additional error catching to ensure JSON responses
 const wrappedHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+  console.log('Booking API wrappedHandler called');
+  
   // Set JSON content type immediately
   res.setHeader('Content-Type', 'application/json');
   
   try {
     // Ensure response hasn't been sent
     if (res.headersSent) {
+      console.log('Response already sent, skipping handler');
       return;
     }
     
+    console.log('Calling handler with middleware...');
     // Call the actual handler wrapped in middleware
     await withErrorHandler(withRateLimit(handler))(req, res);
+    console.log('Handler completed successfully');
   } catch (error: any) {
+    console.error('CATCH-ALL ERROR in wrappedHandler:', error instanceof Error ? error.message : 'Unknown error', error);
+    
     // Final catch-all - ensures we always return JSON
     if (!res.headersSent) {
       logger.error('Unhandled error in booking API wrapper', {
@@ -818,6 +825,7 @@ const wrappedHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       } catch (sendError) {
         // Response already sent, log only
         logger.error('Failed to send error response', { sendError });
+        console.error('Failed to send error response:', sendError);
       }
     }
   }
