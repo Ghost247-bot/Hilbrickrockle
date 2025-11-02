@@ -1,10 +1,14 @@
-# Fix: No Lawyers Available on Netlify
+# Fix: Database Issues on Netlify (500 Errors)
 
-## Problem
-The "Select Lawyer (Optional)" section shows "No lawyers available in the database" on Netlify, but works fine on local server.
+## Problems
+1. The "Select Lawyer (Optional)" section shows "No lawyers available in the database" on Netlify
+2. Contact form returns 500 error on Netlify
+3. Works fine on local server
 
 ## Root Cause
 Netlify is using the **wrong Supabase environment variables**. Your `.env.local` has the correct Supabase credentials, but Netlify needs to be updated with these values.
+
+**Both issues have the same root cause!**
 
 ## ✅ Solution: Update Netlify Environment Variables
 
@@ -65,18 +69,25 @@ After updating environment variables:
 
 ## Verify the Fix
 
+### Test 1: Lawyers Dropdown
 1. Visit your Netlify site
 2. Go to the booking page
 3. Check the "Select Lawyer (Optional)" section
 4. You should now see the list of lawyers
+5. Visit: `https://your-site.netlify.app/api/lawyers` - should return JSON with lawyers data
 
-If it still shows "No lawyers available":
+### Test 2: Contact Form
+1. Visit your Netlify site
+2. Go to the contact page
+3. Fill out and submit the contact form
+4. Should show success message (no more 500 error)
+
+If issues persist:
 
 1. Check the Netlify deployment logs for any errors
-2. Open browser Developer Tools → Console tab
-3. Look for any JavaScript errors
-4. Visit: `https://your-site.netlify.app/api/lawyers` directly
-5. You should see JSON with lawyers data
+2. Open browser Developer Tools → Console tab → Network tab
+3. Look for any JavaScript or API errors
+4. Visit: `https://your-site.netlify.app/api/contact/submit` directly with POST request to test
 
 ## Additional Notes
 
