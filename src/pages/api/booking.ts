@@ -394,6 +394,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     // Parse form data with files
     let form: any;
     try {
+      // Configure formidable - always use tempDir (will be /tmp for serverless)
       form = formidable({
         uploadDir: tempDir,
         keepExtensions: true,
@@ -404,6 +405,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       logger.error('Error creating formidable form', {
         error: formError instanceof Error ? formError.message : 'Unknown error',
       });
+      console.error('Error creating formidable form:', formError.message, 'tempDir:', tempDir);
       return res.status(500).json({
         error: 'Server configuration error',
         message: 'Failed to initialize file upload handler.',
@@ -492,14 +494,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
       const fileKeys = Object.keys(files || {});
       
-      // In serverless environments (Netlify, Vercel, etc.), we only process files for email attachments
-      // Files are not permanently stored on the filesystem
-      const isServerless = 
-        process.env.VERCEL || 
-        process.env.NETLIFY_DEPLOY_PRIME_URL || 
-        process.env.AWS_LAMBDA_FUNCTION_NAME ||
-        process.env.NETLIFY;
-      
+      // Use the same isServerless variable from the top of the handler
       for (const key of fileKeys) {
         const fileArray = files[key];
         if (Array.isArray(fileArray) && fileArray.length > 0) {
