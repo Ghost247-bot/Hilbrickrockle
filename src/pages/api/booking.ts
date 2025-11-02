@@ -476,65 +476,108 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       size: number;
       uploaded_at: string;
     }> = [];
-    const fileKeys = Object.keys(files);
     
-    // Ensure permanent storage directory exists
-    const permanentUploadDir = path.join(process.cwd(), 'public', 'uploads', 'booking');
-    if (!fs.existsSync(permanentUploadDir)) {
-      fs.mkdirSync(permanentUploadDir, { recursive: true });
-    }
+    try {
+      const fileKeys = Object.keys(files || {});
+      
+      // Ensure permanent storage directory exists
+      const permanentUploadDir = path.join(process.cwd(), 'public', 'uploads', 'booking');
+      try {
+        if (!fs.existsSync(permanentUploadDir)) {
+          fs.mkdirSync(permanentUploadDir, { recursive: true });
+        }
+      } catch (dirError: any) {
+        logger.error('Error creating permanent upload directory', {
+          error: dirError instanceof Error ? dirError.message : 'Unknown error',
+        });
+        // Don't fail the request, just log the error
+      }
 
-    for (const key of fileKeys) {
-      const fileArray = files[key];
-      if (Array.isArray(fileArray) && fileArray.length > 0) {
-        const file = fileArray[0] as any;
-        if (file && file.filepath) {
-          try {
-            const originalFilename = file.originalFilename || `document_${key}`;
-            // Create unique filename with timestamp
-            const timestamp = Date.now();
-            const fileExt = path.extname(originalFilename);
-            const fileName = path.basename(originalFilename, fileExt);
-            const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9-_]/g, '_');
-            const uniqueFilename = `${sanitizedFileName}_${timestamp}${fileExt}`;
-            const permanentPath = path.join(permanentUploadDir, uniqueFilename);
-            
-            // Get file stats
-            const fileStats = fs.statSync(file.filepath);
-            const fileSize = fileStats.size;
-            
-            // Move file to permanent location
-            fs.copyFileSync(file.filepath, permanentPath);
-            
-            // Store document metadata
-            documentMetadata.push({
-              filename: originalFilename,
-              path: `/uploads/booking/${uniqueFilename}`,
-              type: file.mimetype || 'application/octet-stream',
-              size: fileSize,
-              uploaded_at: new Date().toISOString(),
-            });
-            
-            // Prepare for email attachment
-            const base64Content = await fileToBase64(permanentPath);
-            attachments.push({
-              filename: originalFilename,
-              content: base64Content,
-              type: file.mimetype || 'application/octet-stream',
-            });
-            
-            // Clean up temporary uploaded file
-            if (fs.existsSync(file.filepath)) {
-              fs.unlinkSync(file.filepath);
+      for (const key of fileKeys) {
+        const fileArray = files[key];
+        if (Array.isArray(fileArray) && fileArray.length > 0) {
+          const file = fileArray[0] as any;
+          if (file && file.filepath) {
+            try {
+              const originalFilename = file.originalFilename || `document_${key}`;
+              // Create unique filename with timestamp
+              const timestamp = Date.now();
+              const fileExt = path.extname(originalFilename);
+              const fileName = path.basename(originalFilename, fileExt);
+              const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9-_]/g, '_');
+              const uniqueFilename = `${sanitizedFileName}_${timestamp}${fileExt}`;
+              const permanentPath = path.join(permanentUploadDir, uniqueFilename);
+              
+              // Get file stats
+              let fileSize = 0;
+              try {
+                const fileStats = fs.statSync(file.filepath);
+                fileSize = fileStats.size;
+              } catch (statError) {
+                logger.warn('Could not get file stats', { filename: originalFilename });
+              }
+              
+              // Move file to permanent location
+              try {
+                fs.copyFileSync(file.filepath, permanentPath);
+              } catch (copyError: any) {
+                logger.error('Error copying file to permanent location', {
+                  error: copyError instanceof Error ? copyError.message : 'Unknown error',
+                  filename: originalFilename,
+                });
+                continue; // Skip this file but continue processing
+              }
+              
+              // Store document metadata
+              documentMetadata.push({
+                filename: originalFilename,
+                path: `/uploads/booking/${uniqueFilename}`,
+                type: file.mimetype || 'application/octet-stream',
+                size: fileSize,
+                uploaded_at: new Date().toISOString(),
+              });
+              
+              // Prepare for email attachment
+              try {
+                const base64Content = await fileToBase64(permanentPath);
+                attachments.push({
+                  filename: originalFilename,
+                  content: base64Content,
+                  type: file.mimetype || 'application/octet-stream',
+                });
+              } catch (base64Error) {
+                logger.warn('Error converting file to base64 for email', {
+                  filename: originalFilename,
+                  error: base64Error instanceof Error ? base64Error.message : 'Unknown error',
+                });
+                // Continue without attachment for this file
+              }
+              
+              // Clean up temporary uploaded file
+              try {
+                if (fs.existsSync(file.filepath)) {
+                  fs.unlinkSync(file.filepath);
+                }
+              } catch (cleanupError) {
+                logger.warn('Error cleaning up temporary file', { filename: originalFilename });
+              }
+            } catch (error) {
+              logger.error('Error processing file upload', { 
+                error: error instanceof Error ? error.message : 'Unknown error',
+                filename: file.originalFilename,
+                stack: error instanceof Error ? error.stack : undefined,
+              });
+              // Continue processing other files
             }
-          } catch (error) {
-            logger.error('Error processing file upload', { 
-              error: error instanceof Error ? error.message : 'Unknown error',
-              filename: file.originalFilename 
-            });
           }
         }
       }
+    } catch (fileProcessingError: any) {
+      logger.error('Error in file processing loop', {
+        error: fileProcessingError instanceof Error ? fileProcessingError.message : 'Unknown error',
+        stack: fileProcessingError instanceof Error ? fileProcessingError.stack : undefined,
+      });
+      // Don't fail the entire request, but log the error
     }
 
     // Save booking to Supabase
@@ -565,13 +608,40 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     });
 
     // Use admin client for server-side operations to bypass RLS
-    const supabaseAdmin = getSupabaseAdmin();
+    let supabaseAdmin;
+    try {
+      supabaseAdmin = getSupabaseAdmin();
+      if (!supabaseAdmin) {
+        throw new Error('Failed to create Supabase admin client');
+      }
+    } catch (adminError: any) {
+      logger.error('Error creating Supabase admin client', {
+        error: adminError instanceof Error ? adminError.message : 'Unknown error',
+        stack: adminError instanceof Error ? adminError.stack : undefined,
+      });
+      return res.status(500).json({
+        error: 'Database connection error',
+        message: 'Failed to connect to database. Please check your configuration.',
+        details: process.env.NODE_ENV === 'development' ? adminError.message : undefined,
+      });
+    }
     
     // First, check if the appointments table exists
-    const { data: tableCheck, error: tableCheckError } = await supabaseAdmin
-      .from('appointments')
-      .select('id')
-      .limit(1);
+    let tableCheckError: any = null;
+    try {
+      const { error: checkError } = await supabaseAdmin
+        .from('appointments')
+        .select('id')
+        .limit(1);
+      
+      tableCheckError = checkError;
+    } catch (checkException: any) {
+      logger.error('Exception during table check', {
+        error: checkException instanceof Error ? checkException.message : 'Unknown error',
+        stack: checkException instanceof Error ? checkException.stack : undefined,
+      });
+      tableCheckError = checkException;
+    }
     
     if (tableCheckError) {
       logger.error('Table check failed', { 
@@ -582,20 +652,41 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       });
       
       // Provide helpful error message
-      if (tableCheckError.message?.includes('does not exist') || tableCheckError.code === '42P01') {
+      if (tableCheckError.message?.includes('does not exist') || tableCheckError.code === '42P01' || tableCheckError.code === 'PGRST205') {
         return res.status(500).json({
           error: 'Database table not found',
           message: 'The appointments table does not exist in the database. Please run the database setup script in Supabase SQL Editor.',
           details: 'See scripts/database-setup.sql for the table creation script.',
         });
       }
+      
+      return res.status(500).json({
+        error: 'Database connection error',
+        message: tableCheckError.message || 'Failed to connect to database',
+        details: process.env.NODE_ENV === 'development' ? tableCheckError.details : undefined,
+      });
     }
 
-    const { data: bookingRecord, error: supabaseError } = await supabaseAdmin
-      .from('appointments')
-      .insert([insertData])
-      .select('id')
-      .single();
+    let bookingRecord: any = null;
+    let supabaseError: any = null;
+    
+    try {
+      const result = await supabaseAdmin
+        .from('appointments')
+        .insert([insertData])
+        .select('id')
+        .single();
+      
+      bookingRecord = result.data;
+      supabaseError = result.error;
+    } catch (insertException: any) {
+      logger.error('Exception during booking insert', {
+        error: insertException instanceof Error ? insertException.message : 'Unknown error',
+        stack: insertException instanceof Error ? insertException.stack : undefined,
+        insertData: { ...insertData, lawyer_id: insertData.lawyer_id || 'null' }
+      });
+      supabaseError = insertException;
+    }
 
     if (supabaseError) {
       logger.error('Error saving booking to database', { 
@@ -614,6 +705,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         errorMessage = 'Invalid lawyer selected. Please try again.';
       } else if (supabaseError.message?.includes('permission denied') || supabaseError.message?.includes('RLS')) {
         errorMessage = 'Database permissions issue. Please contact support.';
+      } else if (supabaseError.message?.includes('does not exist') || supabaseError.code === 'PGRST205') {
+        errorMessage = 'Database table not found. Please run the database setup script.';
       }
       
       return res.status(500).json({

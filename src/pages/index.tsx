@@ -1,12 +1,9 @@
 import React, { useEffect } from 'react';
 import Head from 'next/head';
-import Testimonials from '../components/Testimonials';
-import OfficeMap from '../components/OfficeMap';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { FaGavel, FaBalanceScale, FaHandshake, FaChartLine } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import HeroSlideshow from '../components/HeroSlideshow';
 
 const featuredNews = [
@@ -84,9 +81,6 @@ const testimonials = [
 ];
 
 const HomePage: React.FC = () => {
-  const { scrollYProgress } = useScroll();
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-
   useEffect(() => {
     // Add scroll-based animations
     const observer = new IntersectionObserver((entries) => {
